@@ -15,9 +15,39 @@ saying what was broken" and let the gap do the work.
 
 ## Who it is for
 
+This project has two distinct audiences: people who visit the finished site,
+and people who read the repository that builds it. Both are first-class.
+
+### Audience for the site
+
 Developers, prompt engineers, and anyone who has watched an agent flail because
 of something they themselves did. The ideal reaction is a wince followed by
 sending a case file to a colleague.
+
+### Audience for the repository
+
+**Course students learning spec-driven development with AI coding agents.**
+The repo is a worked example, not just a product. `specs/` is the teaching
+material: students should be able to read this document alongside
+[tech-stack.md](./tech-stack.md) and [roadmap.md](./roadmap.md), then trace
+each roadmap phase to the commits that implemented it. This means the spec stays ahead of the code, every phase is
+small enough to read in one sitting, and when reality diverges from the spec
+we amend the spec rather than quietly drifting.
+
+**Developers giving AI coding demos at conference booths.** The premise reads
+in seconds from across a noisy room, and a single roadmap phase is small
+enough to build live in front of an audience. Three constraints follow:
+
+- **Demos must run offline.** Booth wifi fails. No phase may depend on a live
+  third-party API, a hosted database, or a network call to work locally. This
+  reinforces the libSQL local-file choice and the no-LLM-at-runtime rule.
+- **Every screen must be safe to project.** The site accepts public intake
+  submissions, so unmoderated text could end up on a two-metre screen at a
+  vendor booth. Nothing unreviewed may reach a public route — see Phase 11 in
+  [roadmap.md](./roadmap.md), and treat it as a demo-blocking requirement
+  rather than a nice-to-have.
+- **Setup must be short.** Clone, install, one command, running. Anything that
+  needs a credential or a manual step before `/` renders is a bug.
 
 ## Voice: deadpan clinical
 
