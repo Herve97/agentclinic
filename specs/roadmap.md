@@ -25,7 +25,7 @@ phase.
 
 **Done when:** `npm run dev` serves `/`, and `build`, `lint`, and `test` all
 pass clean.
-**Out:** any clinic *behaviour* — no form, no database, no state. No
+**Out:** any clinic _behaviour_ — no form, no database, no state. No
 navigation, no entry points, no notice board, and no links at all, since no
 other route exists yet. No styling beyond Tailwind's defaults.
 

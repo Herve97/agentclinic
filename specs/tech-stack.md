@@ -6,23 +6,23 @@ later.
 
 ## Recommendation: Next.js (App Router)
 
-| Concern        | Choice                                  |
-| -------------- | --------------------------------------- |
-| Language       | TypeScript, `strict: true`              |
-| Runtime        | Node.js (current LTS)                   |
-| Framework      | **Next.js, App Router**                 |
-| Rendering      | Server Components by default            |
-| Mutations      | Server Actions (intake form POST)       |
-| Styling        | Tailwind CSS                            |
-| Content        | MDX files in-repo for authored content  |
-| Database       | SQLite via libSQL (`@libsql/client`)    |
-| Query layer    | Drizzle ORM + `drizzle-kit` migrations  |
-| Validation     | Zod (shared form + DB schema)           |
-| Unit tests     | Vitest                                  |
-| E2E tests      | Playwright (added at Phase 1, one spec) |
-| Lint / format  | ESLint + Prettier                       |
-| Hosting        | Vercel                                  |
-| Prod database  | Turso (hosted libSQL)                   |
+| Concern       | Choice                                  |
+| ------------- | --------------------------------------- |
+| Language      | TypeScript, `strict: true`              |
+| Runtime       | Node.js (current LTS)                   |
+| Framework     | **Next.js, App Router**                 |
+| Rendering     | Server Components by default            |
+| Mutations     | Server Actions (intake form POST)       |
+| Styling       | Tailwind CSS                            |
+| Content       | MDX files in-repo for authored content  |
+| Database      | SQLite via libSQL (`@libsql/client`)    |
+| Query layer   | Drizzle ORM + `drizzle-kit` migrations  |
+| Validation    | Zod (shared form + DB schema)           |
+| Unit tests    | Vitest                                  |
+| E2E tests     | Playwright (added at Phase 1, one spec) |
+| Lint / format | ESLint + Prettier                       |
+| Hosting       | Vercel                                  |
+| Prod database | Turso (hosted libSQL)                   |
 
 Pin versions at install time rather than from this document — resolve each
 with `npm view <pkg> version` and record what actually landed in

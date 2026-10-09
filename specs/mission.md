@@ -60,7 +60,7 @@ copy obeys it.
 - Quantify absurd things precisely. "Requirement revised 6 times within a
   single session." "Patient re-read the same file 14 times."
 - **Never wink.** No exclamation marks, no "lol", no self-aware asides, no
-  jokes *about* the joke. If a sentence signals that it knows it is funny,
+  jokes _about_ the joke. If a sentence signals that it knows it is funny,
   cut it.
 - The clinic takes its patients seriously and is sincerely on their side. It
   is the humans who are the problem, and the clinic says so only in the

@@ -123,7 +123,7 @@ clinic content, and Phase 9 now states that it replaces this page rather than
 building `/` from nothing.
 
 **Constraint on Phase 9 — the boundary that keeps this minimal:** Phase 9's
-goal is to *sell the premise in one screen*, with clinic identity, a notice
+goal is to _sell the premise in one screen_, with clinic identity, a notice
 board, and entry points to every route. D7 is the identity block alone. It has
 no notice board, no navigation, and **no links at all** — `/intake`,
 `/waiting-room`, `/patients`, and `/transcripts` do not exist yet, and a link
@@ -197,6 +197,13 @@ product.
 restated in `validation.md` once known. If a resolved version differs from
 what this document anticipates, this document is wrong and gets amended.
 
+**Amended 2026-10-09, after resolving:** three majors landed ahead of what
+this document assumed — `eslint` 10 rather than 9, `typescript` 7 rather than
+6, and `tailwindcss` 4.3.3 confirming the v4 risk rather than leaving it
+open. The risk table below was rewritten accordingly, before anything was
+installed. No version number in this document is authoritative;
+`package.json` is.
+
 ---
 
 ## Context
@@ -217,7 +224,7 @@ in this phase only where Phase 0 has something to put in them. `src/app/` is
 created. `src/content/`, `src/db/`, and `src/domain/` are **not** created
 empty; the phase that first needs one creates it.
 
-### Why this phase has no clinic *functionality*
+### Why this phase has no clinic _functionality_
 
 The roadmap's framing is that Phase 1 is the thin end-to-end slice. Phase 0
 exists so that Phase 1 can be about the slice and not about toolchain
@@ -234,14 +241,15 @@ The distinction is the line this phase holds: **copy is in, behaviour is out.**
 
 ## Risks and open questions
 
-| Risk | Mitigation |
-| --- | --- |
-| Tailwind v4 changed its PostCSS integration; v3 instructions will not work. | Resolve the actual installed version first and follow that version's documented setup. Do not follow remembered instructions. |
-| ESLint v9 flat config and Next.js's ESLint plugin have had compatibility churn. | Take whatever `create-next-app` scaffolds for ESLint, then add Prettier on top rather than hand-writing a flat config. |
-| Prettier and ESLint can fight over formatting rules. | `eslint-config-prettier` disables the conflicting rules. Formatting is Prettier's job; lint is ESLint's. |
-| `create-next-app` may scaffold files this phase does not want (an API route, example assets, a marketing page). | Treat its output as a starting point to prune, not as the deliverable. Anything it adds that is not in the In-scope list above is deleted. |
-| The home page (D7) grows into Phase 9's landing page — a notice board, nav, "accepting new patients" as a call to action. | The no-links rule in D7 is the hard stop. Plan group 5 re-checks the Phase 9 boundary before the group closes, and validation §2 fails the phase if `/` acquires a link or an entry point. |
-| The home page copy is written once and never revisited, so Phase 9 inherits Phase 0's placeholder thinking. | D7 states that Phase 9 replaces the page rather than decorating it, and `roadmap.md` Phase 9 now says the same. |
+| Risk                                                                                                                                     | Mitigation                                                                                                                                                                                                                                                                                                                                   |
+| ---------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Tailwind v4 changed its PostCSS integration; v3 instructions will not work.                                                              | **Confirmed at install time: `tailwindcss` resolved to 4.3.3.** The v4 setup is used — `@tailwindcss/postcss` as the PostCSS plugin and a single `@import "tailwindcss";` in the stylesheet. No `tailwind.config` file is generated, which also removes the temptation to add theme keys.                                                    |
+| ESLint v9 flat config and Next.js's ESLint plugin have had compatibility churn.                                                          | **This document assumed v9; `eslint` resolved to 10.12.0.** `eslint-config-next@16.4.0` declares `eslint: ">=9.0.0"`, so v10 is supported and flat config is now the only config format. The mitigation is unchanged and stands: take whatever `create-next-app` scaffolds, then add Prettier on top rather than hand-writing a flat config. |
+| `typescript` resolved to 7.0.2 — a major ahead of the `^6.0.3` the hello-world carried, and ahead of anything this document anticipated. | `eslint-config-next@16.4.0` declares `typescript: ">=3.3.1"`. TypeScript 7 is the native port of the same compiler with the same language semantics, so `strict: true` and the scaffolded `tsconfig.json` carry over unchanged. Confirmed by `npm run build` and `npm run lint` passing, not by assumption.                                  |
+| Prettier and ESLint can fight over formatting rules.                                                                                     | `eslint-config-prettier` disables the conflicting rules. Formatting is Prettier's job; lint is ESLint's.                                                                                                                                                                                                                                     |
+| `create-next-app` may scaffold files this phase does not want (an API route, example assets, a marketing page).                          | Treat its output as a starting point to prune, not as the deliverable. Anything it adds that is not in the In-scope list above is deleted.                                                                                                                                                                                                   |
+| The home page (D7) grows into Phase 9's landing page — a notice board, nav, "accepting new patients" as a call to action.                | The no-links rule in D7 is the hard stop. Plan group 5 re-checks the Phase 9 boundary before the group closes, and validation §2 fails the phase if `/` acquires a link or an entry point.                                                                                                                                                   |
+| The home page copy is written once and never revisited, so Phase 9 inherits Phase 0's placeholder thinking.                              | D7 states that Phase 9 replaces the page rather than decorating it, and `roadmap.md` Phase 9 now says the same.                                                                                                                                                                                                                              |
 
 **Open question for a later phase, not this one:** `create-next-app` defaults
 to a `src/app` layout only if asked. The tech stack's conventions assume
