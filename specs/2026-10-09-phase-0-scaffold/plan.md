@@ -87,8 +87,17 @@ register.
 4.2 `src/app/page.tsx` — a Server Component rendering the clinic name and
 nothing more. Content arrives in group 5.
 
-4.3 Confirm the file is UTF-8 and non-ASCII characters survive the build. The
-em dash in the group 5 copy is the case that matters.
+4.3 Confirm the file is UTF-8 and non-ASCII characters survive the build.
+
+    Amended 2026-10-09: this step said "the em dash in the group 5 copy is the
+    case that matters". It was written against D1's superseded copy
+    (`AgenticClinic — outpatient services.`). D7's copy contains no em dash,
+    so the check had nothing to bite on. Rather than add punctuation to the
+    page to satisfy a stale note, the pipeline was proved directly: an em
+    dash, an `&mdash;` entity, and `ünïcode` were inserted into
+    `page.tsx`, `npm run build` was run, the prerendered output was
+    confirmed to contain `Accepting — UTF8PROBE — ünïcode` with
+    `charSet="utf-8"` and no mojibake, and the probe was reverted.
 
 4.4 No `'use client'`. No custom colours, fonts, or spacing scale.
 
