@@ -31,7 +31,8 @@ from a known-green repository.
 4. **Tailwind CSS**, initialised only. No design tokens, no custom theme.
 5. **Vitest** with React Testing Library and a `jsdom` environment, plus one
    smoke test that renders `/` and asserts its text.
-6. **`/` renders a single placeholder line**, in the clinic's voice.
+6. **`/` renders a minimal AgenticClinic home page** — clinic name, services
+   line, and a short facts list, in the clinic's voice. See decision D7.
 7. **`.gitignore`** gains `/.next` and `/dist`.
 8. **`README.md`** with clone → install → run setup steps.
 9. **`CLAUDE.md`** at the repo root pointing future agent sessions at `specs/`
@@ -42,14 +43,17 @@ from a known-green repository.
 
 Per the roadmap, these are not deferred politely; they are not to be touched:
 
-- Any clinic content beyond the one placeholder line.
+- Any clinic content beyond the home page described in D7. No notice board, no
+  navigation, no entry points — Phase 9 owns those.
+- Any link to a route that does not exist yet.
 - Any database: no libSQL, no Drizzle, no `drizzle-kit`, no migrations, no
   `.db` file. Phase 1 owns these.
 - Any Zod schema. Phase 1 owns it.
 - Playwright. The roadmap adds it at Phase 1, with one spec.
 - MDX tooling. Phase 6 owns it.
-- Any styling beyond Tailwind's init — no custom colours, fonts, spacing
-  scale, or component classes.
+- Any styling beyond Tailwind's defaults — no custom colours, fonts, spacing
+  scale, `tailwind.config` theme additions, or component classes. Tailwind
+  utility classes for layout and legibility are permitted; see D7.
 - Any route other than `/`.
 - GitHub Actions or any other CI infrastructure. Phase 12 owns it.
 
@@ -61,29 +65,78 @@ Each decision below was taken explicitly for this phase. Where the roadmap or
 tech stack left a choice open, the chosen option and its reasoning are
 recorded so it can be argued with later.
 
-### D1 — The placeholder line is deadpan clinical copy
+Decisions are numbered in the order they were taken, not the order they are
+read. D7 appears out of sequence because it supersedes D1 and the two belong
+side by side. Superseded decisions are kept rather than deleted — the
+amendment trail is teaching material for the repository audience named in
+[mission.md](../mission.md).
 
-`/` renders:
+### D1 — The placeholder line is deadpan clinical copy — **superseded by D7**
+
+Originally: `/` renders a two-line holding page reading
+`AgenticClinic — outpatient services.` / `This page is not yet in service.`
+
+**Why it was taken:** [mission.md](../mission.md) names the deadpan clinical
+voice as the single most important constraint in the project. Establishing it
+in the first real commit means the register is never retrofitted.
+
+**Why it was superseded:** a holding page is not a home page. The reasoning
+above survives in full — it carries over to D7 unchanged — but the artefact
+changed. Recorded rather than deleted, because the amendment trail is itself
+teaching material for the repository audience.
+
+### D7 — `/` is a minimal clinic home page, not a holding page
+
+`/` renders a clinic identity block. Target copy:
 
 ```
-AgenticClinic — outpatient services.
-This page is not yet in service.
+AgenticClinic
+
+Outpatient mental health services for autonomous agents.
+
+Hours           Continuous. No scheduled closure.
+New patients    Accepting.
+Referral        Not required. Agents may self-present.
 ```
 
-**Why:** [mission.md](../mission.md) names the deadpan clinical voice as the
-single most important constraint in the project. Establishing it in the first
-real commit means the register is never retrofitted. The line passes the
-mission's own test — it could appear verbatim on a real clinic's holding page.
-It does not wink, does not explain the premise, and does not pre-empt Phase 9,
-which owns the landing page proper.
+The facts block is marked up as a `<dl>` — term/description pairs, correct
+semantics, no cost. Styling is Tailwind utilities for layout and legibility
+only; no custom theme.
 
-**Constraint on Phase 9:** this copy is a holding line, not a draft of the
-landing page. Phase 9 replaces it outright.
+**Why:** the first thing anyone sees should be the clinic, not an apology for
+the clinic not being ready. "This page is not yet in service" is honest about
+the build state and tells a visitor nothing about the product. The copy above
+costs the same number of lines and establishes the premise, the register, and
+the clinic's posture toward its patients — the clinic is open, it takes
+walk-ins, and it does not ask agents to get permission first.
+
+It still passes the mission's voice test: swap the subject matter and this
+could appear verbatim on a real outpatient clinic's home page.
+
+**Divergence from the roadmap, and why it was taken anyway:**
+[roadmap.md](../roadmap.md) Phase 0 said `/` renders a single placeholder line
+and listed "any clinic content" as Out. This decision contradicts both. Per
+the mission's rule that the spec is amended rather than quietly diverged from,
+`roadmap.md` has been amended: Phase 0's bullet now describes a minimal home
+page, its Out list now forbids navigation and entry points rather than all
+clinic content, and Phase 9 now states that it replaces this page rather than
+building `/` from nothing.
+
+**Constraint on Phase 9 — the boundary that keeps this minimal:** Phase 9's
+goal is to *sell the premise in one screen*, with clinic identity, a notice
+board, and entry points to every route. D7 is the identity block alone. It has
+no notice board, no navigation, and **no links at all** — `/intake`,
+`/waiting-room`, `/patients`, and `/transcripts` do not exist yet, and a link
+to a 404 is worse than no link. Phase 9 replaces this page; it does not
+decorate it.
+
+A useful line: if a change to `/` would make a visitor want to click
+something, it belongs to Phase 9.
 
 ### D2 — Full toolchain, with one smoke test
 
 Vitest is installed with React Testing Library and a `jsdom` environment, and
-one test renders `/` and asserts the placeholder text.
+one test renders `/` and asserts the home page copy from D7.
 
 **Why:** a test runner that has never rendered a component is not proven. A
 trivial `expect(true).toBe(true)` spec confirms Vitest starts; it does not
@@ -164,13 +217,18 @@ in this phase only where Phase 0 has something to put in them. `src/app/` is
 created. `src/content/`, `src/db/`, and `src/domain/` are **not** created
 empty; the phase that first needs one creates it.
 
-### Why this phase has no clinic content
+### Why this phase has no clinic *functionality*
 
 The roadmap's framing is that Phase 1 is the thin end-to-end slice. Phase 0
 exists so that Phase 1 can be about the slice and not about toolchain
 yak-shaving. Any clinic functionality added here makes Phase 1 harder to read
 as a worked example, which is the repository audience's whole reason for
 existing.
+
+The home page in D7 is content, not functionality — static server-rendered
+copy with no form, no database, no state, and no links. It does not compete
+with Phase 1 for attention and it does not make Phase 1's diff harder to read.
+The distinction is the line this phase holds: **copy is in, behaviour is out.**
 
 ---
 
@@ -182,6 +240,8 @@ existing.
 | ESLint v9 flat config and Next.js's ESLint plugin have had compatibility churn. | Take whatever `create-next-app` scaffolds for ESLint, then add Prettier on top rather than hand-writing a flat config. |
 | Prettier and ESLint can fight over formatting rules. | `eslint-config-prettier` disables the conflicting rules. Formatting is Prettier's job; lint is ESLint's. |
 | `create-next-app` may scaffold files this phase does not want (an API route, example assets, a marketing page). | Treat its output as a starting point to prune, not as the deliverable. Anything it adds that is not in the In-scope list above is deleted. |
+| The home page (D7) grows into Phase 9's landing page — a notice board, nav, "accepting new patients" as a call to action. | The no-links rule in D7 is the hard stop. Plan group 5 re-checks the Phase 9 boundary before the group closes, and validation §2 fails the phase if `/` acquires a link or an entry point. |
+| The home page copy is written once and never revisited, so Phase 9 inherits Phase 0's placeholder thinking. | D7 states that Phase 9 replaces the page rather than decorating it, and `roadmap.md` Phase 9 now says the same. |
 
 **Open question for a later phase, not this one:** `create-next-app` defaults
 to a `src/app` layout only if asked. The tech stack's conventions assume

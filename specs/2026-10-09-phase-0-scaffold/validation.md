@@ -29,19 +29,29 @@ Run from a clean checkout of `phase-0-scaffold`.
 
 ---
 
-## 2. The placeholder page
+## 2. The home page
+
+Decision D7. Supersedes the holding-page checks that D1 originally specified.
 
 | # | Check | Expected | ✓ |
 | --- | --- | --- | --- |
-| 2.1 | `/` content | Renders exactly the two lines from decision D1: `AgenticClinic — outpatient services.` / `This page is not yet in service.` | ☐ |
-| 2.2 | Em dash | Renders as `—`, not `â€"` or `?`. File is UTF-8. | ☐ |
-| 2.3 | Voice | Passes the mission's test: this copy could appear verbatim on a real clinic's holding page. No exclamation marks, no wink, no explanation of the premise. | ☐ |
-| 2.4 | Nothing else on the page | No nav, no footer, no logo, no example content from the scaffolder. | ☐ |
-| 2.5 | Page metadata | `<title>` and description are in clinical register, not `Create Next App`. | ☐ |
-| 2.6 | Client JS | No `'use client'` anywhere. The page is a Server Component. | ☐ |
+| 2.1 | Clinic name | `AgenticClinic` is present and is the page's only `<h1>`. | ☐ |
+| 2.2 | Services line | `Outpatient mental health services for autonomous agents.` is present. | ☐ |
+| 2.3 | Facts block | Hours, new-patient status, and referral requirement all present, with the values from D7. | ☐ |
+| 2.4 | Facts markup | A `<dl>` with `<dt>`/`<dd>` pairs — not a table, not stacked paragraphs. | ☐ |
+| 2.5 | Em dash | Any em dash renders as `—`, not `â€"` or `?`. File is UTF-8. | ☐ |
+| 2.6 | Voice | Passes the mission's test: swap the subject matter and this could appear verbatim on a real outpatient clinic's home page. No exclamation marks, no wink, no explanation of the premise. | ☐ |
+| 2.7 | **No links** | `grep -c '<a\|<Link' src/app/page.tsx` returns 0. No `/intake`, `/waiting-room`, `/patients`, or `/transcripts` link exists — those routes do not. | ☐ |
+| 2.8 | Nothing else on the page | No nav, no footer, no logo, no notice board, no example content from the scaffolder. | ☐ |
+| 2.9 | One screen | Fits 1280×800 without scrolling. | ☐ |
+| 2.10 | Page metadata | `<title>` and description are in clinical register, not `Create Next App`. | ☐ |
+| 2.11 | Client JS | No `'use client'` anywhere. The page is a Server Component. | ☐ |
+| 2.12 | Phase 9 boundary | Nothing on the page tries to "sell the premise" or invites a click. The D7 line: if a change would make a visitor want to click something, it belonged to Phase 9. | ☐ |
 
-**Blocking:** 2.1, 2.2, 2.4, 2.5. Row 2.3 is a judgement call; if it is
-arguable, the copy is wrong and gets rewritten.
+**Blocking:** all rows except 2.6 and 2.12, which are judgement calls — but if
+either is arguable, the page is wrong and gets rewritten rather than argued
+for. Row 2.7 is the hard stop that keeps this page minimal and is not
+waivable.
 
 ---
 
@@ -51,7 +61,7 @@ A passing test proves nothing unless it can fail.
 
 | # | Check | Expected | ✓ |
 | --- | --- | --- | --- |
-| 3.1 | Test file exists | `src/app/page.test.tsx` renders the page component and asserts both copy lines. | ☐ |
+| 3.1 | Test file exists | `src/app/page.test.tsx` renders the page component and asserts the clinic name, the services line, and each facts-list term from D7. | ☐ |
 | 3.2 | Deliberate failure | Altering the asserted text makes `npm run test` fail with a clear assertion diff — not a config or resolution error. | ☐ |
 | 3.3 | Restored | After reverting the alteration, `npm run test` is green again. | ☐ |
 | 3.4 | JSX under Vitest | The test compiles TSX without a separate build step. | ☐ |
@@ -128,7 +138,7 @@ Run against a fresh clone in a scratch directory outside the project.
 | --- | --- | --- | --- |
 | 6.1 | Steps to running `/` | `git clone` → `npm install` → `npm run dev`. Three commands. | ☐ |
 | 6.2 | No credentials | No `.env` file, no API key, no login, no database provisioning. `/` renders anyway. | ☐ |
-| 6.3 | No network beyond install | After `npm install`, nothing reaches a third-party service. `npm run dev` and `/` work with the network off. | ☐ |
+| 6.3 | No network beyond install | After `npm install`, nothing reaches a third-party service. `npm run dev` and the home page render with the network off — no web font, no CDN asset. | ☐ |
 | 6.4 | No manual setup step | No file to copy, no migration to run, no service to start. | ☐ |
 | 6.5 | README sufficiency | A reader using only `README.md` gets from clone to running `/` without asking a question. | ☐ |
 
@@ -158,12 +168,14 @@ The roadmap's Out list is not a deferral, it is a prohibition. Check each.
 | 7.3 | `@playwright/test`, any `e2e/` directory | Phase 1 | ☐ |
 | 7.4 | Any MDX package | Phase 6 | ☐ |
 | 7.5 | Any route other than `/` | Phases 1–9 | ☐ |
-| 7.6 | Custom Tailwind theme, custom colours, fonts, or spacing scale | Phase 10 | ☐ |
+| 7.6 | `tailwind.config` theme additions, custom colours, custom fonts, custom spacing scale, or component classes. Utility classes on elements are permitted (D7). | Phase 10 | ☐ |
 | 7.7 | Any CI workflow (`.github/workflows/`) | Phase 12 | ☐ |
 | 7.8 | Anything from the rejected list in [tech-stack.md](../tech-stack.md) — MCP SDK, auth library, client state manager, component library, AI SDK | Never | ☐ |
 | 7.9 | Empty convention directories (`src/db/`, `src/domain/`, `src/content/`) created with nothing in them | The phase that first needs one | ☐ |
+| 7.10 | Navigation, entry points, a notice board, or any link on `/` | Phase 9 | ☐ |
+| 7.11 | Any web font fetched at render time — the booth-demo constraint forbids a network call for `/` to render | Never | ☐ |
 
-**Blocking:** all nine. One quick check: `cat package.json` and read every
+**Blocking:** all eleven. One quick check: `cat package.json` and read every
 dependency aloud. Anything you cannot justify from the In list in
 `requirements.md` does not belong.
 
@@ -177,8 +189,9 @@ dependency aloud. Anything you cannot justify from the In list in
 | 8.2 | `CLAUDE.md` exists | Points at `specs/mission.md`, `specs/tech-stack.md`, `specs/roadmap.md`. States the voice constraint and the amend-the-spec rule. Lists the forbidden dependencies. | ☐ |
 | 8.3 | Neither explains the joke | No "this is a satirical site about…" framing aimed at a site visitor. Developer docs may be plain; they may not wink. | ☐ |
 | 8.4 | Spec is accurate | `requirements.md` and `plan.md` describe what was actually built. Any divergence was amended, not left stale. | ☐ |
+| 8.5 | Roadmap in sync | [roadmap.md](../roadmap.md) Phase 0 describes a minimal home page and Phase 9 states that it replaces `/` rather than building it from nothing. The parent spec does not contradict this feature spec. | ☐ |
 
-**Blocking:** 8.1, 8.2, 8.4. Row 8.3 is a judgement call.
+**Blocking:** 8.1, 8.2, 8.4, 8.5. Row 8.3 is a judgement call.
 
 ---
 
@@ -191,12 +204,17 @@ Phase 0 can merge when:
 3. The recorded-run table in section 6 has measured values.
 4. `npm run verify` passes from a clean checkout of the branch.
 5. Section 7 is fully ticked — nothing from a later phase is present.
+6. `/` is a home page a stranger would read as a real clinic's, and it links
+   nowhere.
 
 ## Explicitly not validated here
 
 These are not Phase 0's job and their absence is not a failure:
 
-- Any clinic behaviour, since there is none.
+- Any clinic behaviour — the home page is static copy, and there is no form,
+  no state, and no database to exercise.
+- Whether the premise *lands* in one screen. D7 establishes the register;
+  Phase 9 owns success criterion 1 in [mission.md](../mission.md).
 - Visual design or print layout — Phase 10.
 - Accessibility beyond what semantic HTML gives for free — Phase 10 runs the
   axe audit.

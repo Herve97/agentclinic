@@ -75,95 +75,128 @@ version in any file carries a `^` or `~`.
 
 ---
 
-## 4. The placeholder page
+## 4. The root route and layout
+
+Plumbing only. This group proves the route renders; group 5 writes what is on
+it.
 
 4.1 `src/app/layout.tsx` — the root layout, with `lang="en"`, the Tailwind
     stylesheet imported, and page metadata (title, description) in clinical
     register.
 
-4.2 `src/app/page.tsx` — renders exactly the two-line holding copy from
-    decision D1:
+4.2 `src/app/page.tsx` — a Server Component rendering the clinic name and
+    nothing more. Content arrives in group 5.
 
-    ```
-    AgenticClinic — outpatient services.
-    This page is not yet in service.
-    ```
+4.3 Confirm the file is UTF-8 and non-ASCII characters survive the build. The
+    em dash in the group 5 copy is the case that matters.
 
-4.3 No styling beyond what Tailwind's init provides. No custom colours,
-    fonts, or spacing. Readable is enough; Phase 10 owns design.
+4.4 No `'use client'`. No custom colours, fonts, or spacing scale.
 
-4.4 Confirm the em dash renders correctly — the file is UTF-8 and the
-    character survives the build.
-
-**Check:** `/` shows the holding copy and nothing else. No console errors.
+**Check:** `/` returns 200 and renders the clinic name. No console errors.
 
 ---
 
-## 5. Prettier alongside ESLint
+## 5. The minimal home page
 
-5.1 Install `prettier` and `eslint-config-prettier` at pinned versions.
+Decision D7. A home page, not a holding page — but a minimal one, and not a
+draft of Phase 9's landing page.
 
-5.2 Add `.prettierrc` and `.prettierignore`. Keep the config minimal — defaults
+5.1 `src/app/page.tsx` renders the clinic identity block: name, one-line
+    description of services, and a small facts list. Target copy is in
+    decision D7 of [requirements.md](./requirements.md).
+
+5.2 Mark up the facts as a `<dl>`, not a table or a list of paragraphs. Hours,
+    new-patient status, and referral requirement are term/description pairs
+    and the semantics are free.
+
+5.3 Styling is Tailwind utilities for legibility and layout only — measure,
+    spacing, and type scale from Tailwind's defaults. No custom theme, no
+    `tailwind.config` additions, no component classes. Phase 10 owns design.
+
+5.4 **No links.** `/intake`, `/waiting-room`, `/patients`, and `/transcripts`
+    do not exist yet. A link to a 404 is worse than no link. Phase 9 adds the
+    entry points.
+
+5.5 Check the copy against the voice test in [mission.md](../mission.md):
+    could this appear verbatim on a real clinic's home page with the subject
+    matter swapped? No exclamation marks, no wink, nothing that explains the
+    premise.
+
+5.6 Re-read the Phase 9 boundary in decision D7. If this page starts acquiring
+    a notice board, navigation, or anything that "sells the premise", stop —
+    that is Phase 9 and it is being done early.
+
+**Check:** `/` reads as a real clinic's home page, fits one screen with no
+scrolling at 1280×800, and links nowhere.
+
+---
+
+## 6. Prettier alongside ESLint
+
+6.1 Install `prettier` and `eslint-config-prettier` at pinned versions.
+
+6.2 Add `.prettierrc` and `.prettierignore`. Keep the config minimal — defaults
     unless there is a reason.
 
-5.3 Extend the scaffolded ESLint config with `eslint-config-prettier` so the
+6.3 Extend the scaffolded ESLint config with `eslint-config-prettier` so the
     two do not fight over formatting. Do not hand-write a flat config from
     scratch; extend what `create-next-app` produced.
 
-5.4 Run Prettier across the repo once so the tree is already formatted.
+6.4 Run Prettier across the repo once so the tree is already formatted.
 
 **Check:** `npm run lint` passes clean. `npx prettier --check .` passes clean.
 
 ---
 
-## 6. Vitest with a real smoke test
+## 7. Vitest with a real smoke test
 
-6.1 Install `vitest`, `@vitejs/plugin-react`, `jsdom`,
+7.1 Install `vitest`, `@vitejs/plugin-react`, `jsdom`,
     `@testing-library/react`, and `@testing-library/jest-dom` at pinned
     versions.
 
-6.2 Add `vitest.config.ts`: the React plugin, `environment: 'jsdom'`, a setup
+7.2 Add `vitest.config.ts`: the React plugin, `environment: 'jsdom'`, a setup
     file importing the jest-dom matchers, and the same path aliases
     `tsconfig.json` uses.
 
-6.3 Write `src/app/page.test.tsx` — render the page component, assert both
-    lines of the holding copy are present.
+7.3 Write `src/app/page.test.tsx` — render the page component and assert the
+    clinic name, the services line, and each facts-list term from group 5 are
+    present.
 
-6.4 Confirm the test fails for the right reason: change the asserted text,
+7.4 Confirm the test fails for the right reason: change one asserted string,
     watch it fail, change it back. A test that has never failed proves
     nothing.
 
 **Check:** `npm run test` reports 1 passing test, and the deliberate-failure
-step above produced a real failure.
+step above produced a real failure with an assertion diff.
 
 ---
 
-## 7. Scripts and ignores
+## 8. Scripts and ignores
 
-7.1 `package.json` scripts: `dev`, `build`, `start`, `lint`, `format`, `test`,
+8.1 `package.json` scripts: `dev`, `build`, `start`, `lint`, `format`, `test`,
     and `verify` chaining lint → build → test (decision D3).
 
-7.2 `.gitignore` gains `/.next` and `/dist`, keeping whatever it already had.
+8.2 `.gitignore` gains `/.next` and `/dist`, keeping whatever it already had.
 
-7.3 Confirm no `.db` file, `.env*`, or build output is tracked.
+8.3 Confirm no `.db` file, `.env*`, or build output is tracked.
 
 **Check:** `npm run verify` passes end to end. `git status` shows no build
 artefacts.
 
 ---
 
-## 8. README and CLAUDE.md
+## 9. README and CLAUDE.md
 
-8.1 `README.md`: what AgenticClinic is in two sentences, then clone → install
+9.1 `README.md`: what AgenticClinic is in two sentences, then clone → install
     → `npm run dev`. Short enough to read standing up. Link `specs/`.
 
-8.2 `CLAUDE.md`: point future sessions at `specs/mission.md`,
+9.2 `CLAUDE.md`: point future sessions at `specs/mission.md`,
     `specs/tech-stack.md`, and `specs/roadmap.md`. Restate the deadpan
     clinical voice constraint and the rule that the spec is amended rather
     than quietly diverged from. Name the forbidden dependencies from the tech
     stack's rejected list.
 
-8.3 Neither file explains the joke. The README describes the project as the
+9.3 Neither file explains the joke. The README describes the project as the
     clinic would not — it is developer documentation, not clinic copy — but it
     does not wink at the premise either.
 
@@ -172,38 +205,46 @@ running `/` using only the README.
 
 ---
 
-## 9. Cold-clone verification
+## 10. Cold-clone verification
 
-9.1 Clone the branch to a scratch directory outside the project.
+10.1 Clone the branch to a scratch directory outside the project.
 
-9.2 With no `.env` file and no credentials, run `npm install` and then
-    `npm run dev`.
+10.2 With no `.env` file and no credentials, run `npm install` and then
+     `npm run dev`.
 
-9.3 Confirm `/` renders. Count the steps and the elapsed time; record both in
-    [validation.md](./validation.md).
+10.3 Confirm `/` renders the home page. Count the steps and the elapsed time;
+     record both in [validation.md](./validation.md).
 
-9.4 Confirm nothing in the run reaches a third-party service. `npm install` is
-    the only permitted network access.
+10.4 Confirm nothing in the run reaches a third-party service. `npm install`
+     is the only permitted network access. In particular, no web font is
+     fetched at render time — the booth-demo constraint in
+     [mission.md](../mission.md) forbids it and group 5 uses Tailwind's
+     default stack.
 
-**Check:** the cold-clone row in `validation.md` is filled in with real
+**Check:** the recorded-run table in `validation.md` is filled in with real
 numbers, not estimates.
 
 ---
 
-## 10. Review against the spec
+## 11. Review against the spec
 
-10.1 Walk [validation.md](./validation.md) top to bottom and tick every row
+11.1 Walk [validation.md](./validation.md) top to bottom and tick every row
      with evidence, not assertion.
 
-10.2 Re-read the Out list in [requirements.md](./requirements.md) and confirm
+11.2 Re-read the Out list in [requirements.md](./requirements.md) and confirm
      nothing forbidden crept in — no database package, no Zod, no Playwright,
-     no second route, no custom styling.
+     no second route, no custom theme, no links to unbuilt routes.
 
-10.3 If reality diverged from the spec anywhere, amend the spec in the same
+11.3 Confirm [roadmap.md](../roadmap.md) Phase 0 and Phase 9 still match what
+     was built. The home page was an amendment to the roadmap, not a quiet
+     divergence from it; if the page grew past what D7 describes, the roadmap
+     is now wrong and gets amended again.
+
+11.4 If reality diverged from the spec anywhere, amend the spec in the same
      commit range. The spec staying accurate is a deliverable of this phase,
      not an afterthought.
 
-10.4 Commit, push, open a PR against `main`.
+11.5 Commit, push, open a PR against `main`.
 
 **Check:** every row in `validation.md` is ticked and `npm run verify` passes
 from a clean checkout.

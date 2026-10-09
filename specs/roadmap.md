@@ -19,12 +19,22 @@ phase.
 
 - Replace the `tsc` hello-world with the Next.js App Router scaffold.
 - TypeScript `strict: true`, ESLint, Prettier, Tailwind, Vitest.
-- `/` renders a single placeholder line.
+- `/` renders a minimal clinic home page: name, services line, and a short
+  facts list (hours, new-patient status, referral). Static copy, no links.
 - `.gitignore` gains `/.next` and `/dist`.
 
 **Done when:** `npm run dev` serves `/`, and `build`, `lint`, and `test` all
 pass clean.
-**Out:** any clinic content, any database, any styling beyond Tailwind's init.
+**Out:** any clinic *behaviour* — no form, no database, no state. No
+navigation, no entry points, no notice board, and no links at all, since no
+other route exists yet. No styling beyond Tailwind's defaults.
+
+Amended 2026-10-09: this phase originally rendered a single placeholder line
+and listed all clinic content as out. A holding page told a visitor nothing
+and cost the same number of lines as a home page, so the copy was brought
+forward while the behaviour stayed out. See
+[2026-10-09-phase-0-scaffold/requirements.md](./2026-10-09-phase-0-scaffold/requirements.md)
+decision D7.
 
 ---
 
@@ -152,6 +162,10 @@ chrome.
 
 - Clinic identity: name, hours, "accepting new patients", notice board.
 - Entry points to intake, waiting room, patients, transcripts.
+
+Phase 0 left a minimal identity block at `/` with no links. This phase
+**replaces** that page rather than decorating it — the notice board and the
+entry points are the work here, and by now every route they point at exists.
 
 **Done when:** the premise lands with no explanation, per success criterion 1
 in [mission.md](./mission.md).
