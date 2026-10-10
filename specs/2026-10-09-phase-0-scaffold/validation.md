@@ -32,6 +32,19 @@ Run from a clean checkout of `phase-0-scaffold`.
 - 1.1 `npm run dev` → `▲ Next.js 16.4.0 (Turbopack)`, `✓ Ready in 1505ms`,
   then `GET / 200 in 1102ms`. `curl -o /dev/null -w '%{http_code}'` returned
   `200`. No errors in the dev log.
+
+  **Corrected 2026-10-10.** This row's expected value is "no errors in
+  terminal **or browser console**", and the evidence above covers only the
+  terminal — `curl` does not run React, so it cannot surface a hydration
+  error. The row was ticked on incomplete evidence. A real browser was opened
+  afterwards and did report a console error on `/`: an attribute mismatch
+  from a Berrycast extension writing `data-berrycast-extension="0.8.14"` onto
+  `<body>` before hydration. It was fixed with
+  `suppressHydrationWarning` on `<body>` (divergence 7 below), and the row
+  now stands on a checked browser console rather than an inference from
+  `curl`. Later phases: a clean `curl` is not evidence about the browser
+  console.
+
 - 1.2 `npm run build` → `✓ Compiled successfully`,
   `Finished TypeScript in 5.4s`, `✓ Generating static pages (3/3)`, and a
   route table showing `○ /` prerendered as static content. Exit 0.
@@ -436,7 +449,20 @@ spec document in the same commit range as the code.
    rejected as working around row 1.6 rather than satisfying it.
 6. **The lockfile had to be regenerated.** Not a spec divergence but a real
    defect the cold clone caught; recorded in section 6 above.
-7. **No pull request was opened, though plan step 11.5 calls for one.** The
+7. **`<body>` carries `suppressHydrationWarning`, which no spec document
+   anticipated.** A Berrycast browser extension adds
+   `data-berrycast-extension="0.8.14"` to `<body>` before React hydrates,
+   producing a console hydration error on `/`. Our own code was ruled out
+   first, with evidence: three consecutive server renders of `/` are
+   byte-identical once Next's per-request `self.__next_r` id is normalised,
+   `src/` contains no `Date`, `Math.random`, `toLocale*`, `window`,
+   `document`, `useEffect` or `useState`, and there is no `'use client'`
+   anywhere. React's own error output named the attribute and the extension.
+   The fix is React's documented escape hatch, scoped to the one element whose
+   attributes are all third-party by definition. Plan step 4.1 records it.
+   Revisit only if `<body>` ever gains attributes of ours, at which point the
+   suppression would start hiding something real.
+8. **No pull request was opened, though plan step 11.5 calls for one.** The
    `phase-0-scaffold` branch was renamed to `main` before the push, so the
    phase's commits are `main`'s history on the remote rather than a branch
    sitting alongside it, and a PR has no second ref to target. The step was

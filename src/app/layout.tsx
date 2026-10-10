@@ -10,7 +10,15 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      {/*
+        Browser extensions routinely stamp attributes onto <body> before React
+        hydrates — a Berrycast build adding data-berrycast-extension is what
+        prompted this. We render <body> with no attributes of our own, so
+        suppressing attribute mismatches here can only ever silence a third
+        party's injection, never one of ours. It applies to this element's own
+        attributes and text, not to its descendants.
+      */}
+      <body suppressHydrationWarning>{children}</body>
     </html>
   );
 }

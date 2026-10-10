@@ -84,6 +84,16 @@ it.
 stylesheet imported, and page metadata (title, description) in clinical
 register.
 
+    Amended 2026-10-10: `<body>` also carries `suppressHydrationWarning`.
+    A Berrycast build (0.8.14) stamps `data-berrycast-extension` onto
+    `<body>` before React hydrates, which React reports as an attribute
+    mismatch on `/`. The attribute is the extension's, not ours — the server
+    sends `<body>` with no attributes at all, so suppressing attribute
+    mismatches on this one element can only ever silence a third party's
+    injection. It does not cascade to descendants, and it is not emitted into
+    the HTML; it travels in the RSC payload as a prop. See divergence 7 in
+    [validation.md](./validation.md).
+
 4.2 `src/app/page.tsx` — a Server Component rendering the clinic name and
 nothing more. Content arrives in group 5.
 
