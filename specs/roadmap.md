@@ -193,6 +193,12 @@ in [mission.md](./mission.md).
 - Rate limiting per IP.
 - Length caps, a profanity and abuse filter, a moderation queue flag.
 - Cases stay unlisted from the waiting room until cleared.
+- Case URLs stop being enumerable. Phase 1 made `cases.id` a sequential
+  integer, so `/cases/1`, `/cases/2` and so on can be walked by hand;
+  unlisting a case from the waiting room does not hide it. Either the ids
+  become unguessable or `/cases/[id]` gates on the cleared flag. Added
+  2026-10-10 from decision D3 of
+  [2026-10-10-phase-1-slice/requirements.md](./2026-10-10-phase-1-slice/requirements.md).
 
 **Done when:** abuse-path tests pass and nothing unmoderated reaches a public
 route.
