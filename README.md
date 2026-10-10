@@ -17,21 +17,40 @@ npm install
 npm run dev
 ```
 
-`http://localhost:3000` serves the clinic home page. No `.env` file, no
-credentials, and no database are needed — nothing beyond `npm install` touches
+`http://localhost:3000` serves the clinic home page, and `/intake` submits a
+presenting complaint. No `.env` file and no credentials are needed: the
+database is a local SQLite file at `local.db`, created and migrated
+automatically before `dev` and `build`. Nothing beyond `npm install` touches
 the network.
+
+Set `DATABASE_URL` to point somewhere else; leaving it unset means
+`file:local.db`.
+
+### Running the end-to-end spec
+
+One extra step, needed only for the Playwright spec and not for running the
+app:
+
+```sh
+npx playwright install chromium
+npm run test:e2e
+```
 
 ## Scripts
 
-| Command          | Does                                                      |
-| ---------------- | --------------------------------------------------------- |
-| `npm run dev`    | Development server on port 3000                           |
-| `npm run build`  | Production build                                          |
-| `npm start`      | Serve a production build                                  |
-| `npm run lint`   | ESLint                                                    |
-| `npm run format` | Prettier, writing in place                                |
-| `npm run test`   | Vitest, single run                                        |
-| `npm run verify` | `lint` → `build` → `test`; the gate every phase must pass |
+| Command               | Does                                                      |
+| --------------------- | --------------------------------------------------------- |
+| `npm run dev`         | Migrate, then development server on port 3000             |
+| `npm run build`       | Migrate, then production build                            |
+| `npm start`           | Serve a production build                                  |
+| `npm run lint`        | ESLint                                                    |
+| `npm run format`      | Prettier, writing in place                                |
+| `npm run test`        | Vitest, single run                                        |
+| `npm run test:e2e`    | Playwright; needs `playwright install` once               |
+| `npm run db:generate` | Generate a migration from `src/db/schema.ts`              |
+| `npm run db:migrate`  | Apply pending migrations                                  |
+| `npm run verify`      | `lint` → `build` → `test`; the gate every phase must pass |
+| `npm run verify:all`  | `verify`, then the end-to-end spec                        |
 
 ## Specs
 

@@ -7,6 +7,11 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     setupFiles: ["./vitest.setup.ts"],
+    // Vitest default-includes **/*.spec.ts, which matches the Playwright
+    // specs in e2e/. Those import @playwright/test and cannot run under
+    // Vitest, so they are excluded here rather than renamed — the .spec
+    // suffix is Playwright convention and worth keeping.
+    exclude: ["**/node_modules/**", "**/dist/**", "**/.next/**", "e2e/**"],
   },
   resolve: {
     alias: {

@@ -96,11 +96,11 @@ Fill in during plan group 1. **Leave no row blank at merge time.**
 
 | Package            | Resolved version |
 | ------------------ | ---------------- |
-| `@libsql/client`   |                  |
-| `drizzle-orm`      |                  |
-| `drizzle-kit`      |                  |
-| `zod`              |                  |
-| `@playwright/test` |                  |
+| `@libsql/client`   | 0.18.0           |
+| `drizzle-orm`      | 0.45.4           |
+| `drizzle-kit`      | 0.31.11          |
+| `zod`              | 4.6.5            |
+| `@playwright/test` | 1.64.0           |
 
 Amendments made: _(none / list them)_
 

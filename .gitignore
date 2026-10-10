@@ -18,6 +18,20 @@
 /.next
 /out
 
+# local database (Phase 1, decision D1)
+local.db
+local.db-*
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# playwright
+/test-results
+/playwright-report
+/blob-report
+/.playwright
+
 # build output
 /dist
 /build
