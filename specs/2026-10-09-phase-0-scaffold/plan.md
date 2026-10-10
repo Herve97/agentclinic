@@ -255,5 +255,17 @@ not an afterthought.
 
 11.5 Commit, push, open a PR against `main`.
 
+    Amended 2026-10-10: committed and pushed, no PR. The phase was built on
+    `phase-0-scaffold`, but that branch was renamed to `main` before the
+    push, so the three Phase 0 commits became `main`'s own history on the
+    remote (`github.com/Herve97/agentclinic`, `main` at `3eb1178`). There
+    is no base branch to open a PR against — a PR needs two refs and there is
+    only one. Nothing was worked around: the review this step exists to
+    provoke was done as step 11.1, against `validation.md`, before the push.
+
+    For later phases, keep the feature branch and open the PR from it. This
+    step assumed that shape and it is the right one; Phase 0 is the exception
+    because its branch became the trunk.
+
 **Check:** every row in `validation.md` is ticked and `npm run verify` passes
 from a clean checkout.

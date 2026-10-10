@@ -436,6 +436,12 @@ spec document in the same commit range as the code.
    rejected as working around row 1.6 rather than satisfying it.
 6. **The lockfile had to be regenerated.** Not a spec divergence but a real
    defect the cold clone caught; recorded in section 6 above.
+7. **No pull request was opened, though plan step 11.5 calls for one.** The
+   `phase-0-scaffold` branch was renamed to `main` before the push, so the
+   phase's commits are `main`'s history on the remote rather than a branch
+   sitting alongside it, and a PR has no second ref to target. The step was
+   amended to record this and to say that later phases keep their feature
+   branch. The spec review the step exists for happened anyway, as step 11.1.
 
 ## Explicitly not validated here
 
