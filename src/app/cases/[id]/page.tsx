@@ -2,7 +2,15 @@ import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 
 import { db } from "@/db/client";
-import { cases } from "@/db/schema";
+import { cases, type CaseRow } from "@/db/schema";
+import { intakeFieldLabels, intakeFields } from "@/domain/case";
+
+// Decision D2: reads can return null where a row predates the Phase 2
+// migration. A legitimate zero is not a missing value, so the check is against
+// null rather than falsiness.
+function recorded(value: CaseRow[keyof CaseRow]): string {
+  return value === null ? "Not recorded." : String(value);
+}
 
 export default async function CasePage({ params }: PageProps<"/cases/[id]">) {
   const { id } = await params;
@@ -24,10 +32,20 @@ export default async function CasePage({ params }: PageProps<"/cases/[id]">) {
     notFound();
   }
 
+  // Decision D8: labelled term/description pairs and nothing else. The chart
+  // note — header block, history, assessment, plan, follow-up interval — is
+  // Phase 3.
   return (
     <main className="mx-auto max-w-prose px-6 py-16">
       <h1 className="text-3xl font-semibold tracking-tight">{`Case ${record.id}`}</h1>
-      <p className="mt-4 whitespace-pre-wrap">{record.complaint}</p>
+      <dl className="mt-8">
+        {intakeFields.map((field) => (
+          <div key={field} className="mt-4">
+            <dt>{intakeFieldLabels[field]}</dt>
+            <dd className="whitespace-pre-wrap">{recorded(record[field])}</dd>
+          </div>
+        ))}
+      </dl>
     </main>
   );
 }

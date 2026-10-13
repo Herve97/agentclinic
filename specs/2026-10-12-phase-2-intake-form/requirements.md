@@ -240,6 +240,56 @@ rather than as a record of what was submitted, it is Phase 3.
 As Phase 0's D6 and Phase 1's D10. This phase expects to add no dependencies at
 all; if it does, they are resolved with `npm view` and pinned.
 
+### D10 — The labels and the blank form live beside the field list, not beside the action
+
+Added 2026-10-13, during implementation. `src/domain/case.ts` exports
+`intakeFieldLabels` and `emptyIntakeValues` alongside `intakeFields` and
+`durationOptions`.
+
+**Why the labels:** `/intake` asks the six questions and `/cases/[id]` lists the
+six answers, so the same six strings are needed in two places. Two copies drift,
+and the drift would be invisible — a label renamed on the form while the case
+file keeps the old wording still renders. `src/content/` is where authored copy
+will live, but Phase 6 owns that directory and validation §6 row 6.11 forbids
+creating it empty here.
+
+**Why the blank form:** a `"use server"` module may only export async
+functions. The first implementation put the initial `useActionState` value next
+to the action, which type-checked, built, and then threw
+`Cannot read properties of undefined (reading 'complaint')` in the browser on
+first render. The constant moved to `src/domain/case.ts`; the state's _type_
+stays with the action, because types are erased and exporting one is allowed.
+
+Recorded rather than fixed quietly: the failure mode is specific to Server
+Actions, survives a clean `lint` and `build`, and is only caught by something
+that renders the page.
+
+### D11 — The `<select>` is remounted by key so a failed submit keeps its selection
+
+Added 2026-10-13, during implementation. The duration `<select>` carries
+`key={state.values.duration}` as well as `defaultValue`.
+
+**Why:** React resets the form after an action completes. For an `<input>` or
+`<textarea>` this is harmless, because React keeps the element's `defaultValue`
+attribute in step with the prop and the reset restores the element to it. A
+`<select>` is different: React applies `defaultValue` to the option's
+`defaultSelected` on mount only, so a reset restores the selection the control
+was _mounted_ with — the blank one. The first implementation of this form lost
+the duration on every failed submit while keeping all five other answers.
+
+Changing the key when the submitted duration changes remounts the control, and
+the remount re-applies `defaultValue`. A repeated failure with the same
+selection does not remount and does not need to: the last mount already set
+that selection as the one a reset restores.
+
+**Rejected alternatives:** `selected` on the matching `<option>` (React logs a
+warning, which validation §2 row 2.8 forbids) and a controlled `<select>` with
+`useState` (client state for a value the server already returned, and one step
+toward the form library the Out list forbids).
+
+Validation §5 row 5.2 called this "the part most easily missed" before the code
+was written. It was missed, and the spec's own row caught it.
+
 ---
 
 ## Context
