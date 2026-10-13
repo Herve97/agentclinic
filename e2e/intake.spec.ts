@@ -19,9 +19,10 @@ const submission = {
   humanMeant: "Infer the specification and be correct about it.",
 };
 
-// Decision D7: this is Phase 1's spec, updated rather than replaced. The case
-// number assertion is the roadmap's Phase 1 done-when condition and keeps
-// passing; the five new fields are Phase 2's round trip.
+// Phase 2's decision D7 and Phase 3's decision D6: this is Phase 1's spec,
+// updated twice rather than replaced. The case number assertion is the
+// roadmap's Phase 1 done-when condition, the six values are Phase 2's round
+// trip, and the sections and the derived chronicity are Phase 3's chart note.
 test("an intake submission comes back as a case number", async ({ page }) => {
   await page.goto("/intake");
 
@@ -40,21 +41,47 @@ test("an intake submission comes back as a case number", async ({ page }) => {
   const caseNumber = /^Case \d+$/;
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(caseNumber);
 
-  // Each submitted value round-trips through the database and back onto the
-  // case file. Scoped to the <dd> that follows each <dt>, so a value matching
-  // its own label is not what satisfies the assertion.
-  for (const [label, value] of [
-    ["Presenting complaint", submission.complaint],
-    ["Duration", submission.duration],
-    ["Requirement revisions", submission.requirementRevisions],
-    ["Prior episodes", submission.priorEpisodes],
-    ["What the human said", submission.humanSaid],
-    ["What the human meant", submission.humanMeant],
-  ]) {
-    await expect(
-      page.locator("dl > div", { has: page.locator(`dt:text-is("${label}")`) }),
-    ).toContainText(value);
-  }
+  // The note is one document, so the values are asserted against <main> rather
+  // than against the per-field blocks Phase 2 rendered and this phase removed.
+  const note = page.locator("main");
+
+  // Phase 3's decision D6: every submitted value still appears. The two counts
+  // are asserted inside the sentences decision D4 requires, so a page that
+  // merely echoed the numbers back as labelled values would fail.
+  await expect(note).toContainText(submission.complaint);
+  await expect(note).toContainText(submission.humanSaid);
+  await expect(note).toContainText(submission.humanMeant);
+  await expect(note).toContainText("Course spanning several days.");
+  await expect(note).toContainText(
+    "Requirement revised 6 times over several days.",
+  );
+  await expect(note).toContainText("2 prior episodes recorded.");
+
+  // The six sections of decision D1, in order. The header block is headed by
+  // the <h1>; the other five are <h2>.
+  await expect(page.locator("main h2")).toHaveText([
+    "Presenting complaint",
+    "History",
+    "Assessment",
+    "Plan",
+    "Follow-up",
+  ]);
+
+  // One derived value, to prove the wiring. The rules themselves are unit
+  // tested in src/domain/case-note.test.ts — "Several days" is subacute, and a
+  // subacute course with prior episodes is reviewed in 14 days.
+  // Scoped to the <dd>, and exact: the block text contains the <dt> word
+  // "Chronicity", which contains "Chronic", so a toContainText against the
+  // whole block passes for the wrong value. The deliberate-failure step of
+  // plan 4.5 caught this assertion passing vacuously.
+  await expect(
+    page
+      .locator("dl > div", {
+        has: page.locator('dt:text-is("Chronicity")'),
+      })
+      .locator("dd"),
+  ).toHaveText("Subacute");
+  await expect(note).toContainText("Review in 14 days.");
 });
 
 // Decision D7: the failure path. Not provable by a unit test — it is about the

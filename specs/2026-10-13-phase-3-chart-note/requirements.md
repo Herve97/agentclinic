@@ -79,19 +79,35 @@ its decision D8, this phase rebases rather than working around it.
 
 ### D1 — The six sections, in this order
 
-| Section              | Holds                                                       |
-| -------------------- | ----------------------------------------------------------- |
-| Header block         | Case number, intake date, chronicity, episode history       |
-| Presenting complaint | The complaint, verbatim                                     |
-| History              | Duration, revision count, prior episodes, said versus meant |
-| Assessment           | Authored prose selected by the derived values               |
-| Plan                 | Authored prose selected by the derived values               |
-| Follow-up            | A derived interval, stated as an interval                   |
+| Section              | Holds                                                                            |
+| -------------------- | -------------------------------------------------------------------------------- |
+| Header block         | Letterhead, case number, intake date, patient class, chronicity, episode history |
+| Presenting complaint | The complaint, verbatim                                                          |
+| History              | Duration, revision count, prior episodes, said versus meant                      |
+| Assessment           | Authored prose selected by the derived values                                    |
+| Plan                 | Authored prose selected by the derived values                                    |
+| Follow-up            | A derived interval, stated as an interval                                        |
 
 **Why this order:** it is the order a chart note is written in and the order the
 roadmap lists. A reader who skims only the header and the assessment should
 still get the premise, so the two strongest pieces of copy sit at the top and in
 the middle rather than at the end.
+
+**Amended 2026-10-13, during implementation: the header block gains a
+letterhead and a patient class.** The first draft held only the case number, the
+intake date and the two derived values, and the note that resulted did not pass
+its own done-when condition. Read with the rest of the site hidden, it was a
+clinical record about an unnamed patient and an "operator" — satire of some
+workplace, not of this one. Nothing on the page said which clinic had written it
+or that the patient was an agent.
+
+Two constant lines fix it: the clinic's name as a letterhead above the case
+number, and a `Patient class` row reading "Autonomous agent. Self-presenting, no
+referral." Both are true of every case, neither is derived from the row, and a
+real chart note carries both — a letterhead and a patient category are the two
+things a clinical document never omits. This is the cheapest possible fix for
+the roadmap's condition, and it is header-block content rather than the clinic
+identity block on `/`, which stays Phase 9's.
 
 **"What the human said" and "what the human meant" belong to History**, as a
 reported-speech pair. They are the two funniest fields on the form, and the

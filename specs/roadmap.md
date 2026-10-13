@@ -125,6 +125,15 @@ the fictionality of the scheme is unmistakable on the page.
 **Done when:** submitting a new case makes it appear at the top of the list.
 **Out:** search, filtering, sorting controls.
 
+Added 2026-10-13, from Phase 3: this phase adds the repository's **second
+Playwright spec file**, and `playwright.config.ts` sets `fullyParallel: false`
+but leaves the worker count at the default. Playwright still runs separate files
+in parallel workers, so the failure-path test's `select count(*) from cases`
+before-and-after assertion becomes order-dependent the moment a second file
+exists — Phase 3 observed it fail that way against a temporary third spec. Phase
+5 either pins `workers: 1` or scopes that assertion to a marker value rather
+than to a whole-table count.
+
 ---
 
 ## Phase 6 — Patient profiles
