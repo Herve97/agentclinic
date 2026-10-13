@@ -1,4 +1,35 @@
+import { createClient } from "@libsql/client";
 import { expect, test, type Page } from "@playwright/test";
+
+import { pageSize } from "../src/domain/waiting-room";
+
+// The spec writes to the same local file the dev server reads, so the
+// pagination test can guarantee a second page exists whatever the database
+// started with. Every seeded row is a complete, valid case.
+const seedTo = async (total: number) => {
+  const db = createClient({ url: process.env.DATABASE_URL ?? "file:local.db" });
+
+  try {
+    const counted = await db.execute("select count(*) as n from cases");
+    const existing = Number(counted.rows[0].n);
+
+    for (let i = existing; i < total; i += 1) {
+      await db.execute({
+        sql: "insert into cases (complaint, duration, requirement_revisions, prior_episodes, human_said, human_meant) values (?, ?, ?, ?, ?, ?)",
+        args: [
+          `Seeded case ${i + 1}. Requirement restated without being stated.`,
+          "Several days",
+          2,
+          0,
+          "As discussed.",
+          "Nothing was discussed.",
+        ],
+      });
+    }
+  } finally {
+    db.close();
+  }
+};
 
 // The roadmap's done-when condition for Phase 5: submitting a new case makes it
 // appear at the top of the list. The config pins workers to 1 (decision D6),
@@ -70,6 +101,14 @@ test("a new case appears at the top of the waiting room", async ({ page }) => {
 });
 
 test("the list is newest first and paginates", async ({ page }) => {
+  // The first version of this test assumed a second page existed, which it did
+  // on a development database holding twenty-three cases and did not on a cold
+  // clone holding two. A spec that depends on accumulated local data is not a
+  // spec. It seeds its own fixture instead, directly, because filling the form
+  // twenty-one times would spend two minutes to prove something about
+  // pagination rather than about intake.
+  await seedTo(pageSize + 1);
+
   await page.goto("/waiting-room");
 
   const ids = async () =>
