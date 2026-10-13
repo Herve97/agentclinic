@@ -17,11 +17,12 @@ npm install
 npm run dev
 ```
 
-`http://localhost:3000` serves the clinic home page, and `/intake` submits a
-presenting complaint. No `.env` file and no credentials are needed: the
-database is a local SQLite file at `local.db`, created and migrated
-automatically before `dev` and `build`. Nothing beyond `npm install` touches
-the network.
+`http://localhost:3000` serves the clinic home page, and `/intake` takes a
+six-field intake: presenting complaint, duration, requirement revisions, prior
+episodes, what the human said, and what the human meant. No `.env` file and
+no credentials are needed: the database is a local SQLite file at `local.db`,
+created and migrated automatically before `dev` and `build`. Nothing beyond
+`npm install` touches the network.
 
 Set `DATABASE_URL` to point somewhere else; leaving it unset means
 `file:local.db`.

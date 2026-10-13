@@ -70,6 +70,17 @@ route, anonymisation, rate limiting. Ugly is correct here.
 branch has a unit test.
 **Out:** visual design, diagnosis logic.
 
+Amended 2026-10-13: "frequency of requirement changes" is collected as a count
+rather than a frequency. The column is `requirement_revisions` and the label is
+"Requirement revisions", because what a chart can compare across cases is a
+number of occurrences. `duration` is likewise a fixed set of five clinical
+intervals rather than free text, so Phase 3 can derive chronicity from it. Both
+are decision D1 of
+[2026-10-12-phase-2-intake-form/requirements.md](./2026-10-12-phase-2-intake-form/requirements.md),
+which also records two decisions taken during implementation: D10, because a
+`"use server"` module may only export async functions, and D11, because React
+restores a `<select>` to the selection it was mounted with after an action.
+
 ---
 
 ## Phase 3 — The case file as a chart note
