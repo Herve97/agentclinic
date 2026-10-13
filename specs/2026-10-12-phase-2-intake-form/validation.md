@@ -395,7 +395,7 @@ has not merged. This phase's pull request is marked as stacked on it.
 
 ### Recorded divergences from the spec as written
 
-Three, all amended in the spec in the same commit range as the code, per
+Four, all amended in the spec in the same commit range as the code, per
 `CLAUDE.md`:
 
 1. **Decisions D10 and D11 were added during implementation.** Neither changes
@@ -413,6 +413,16 @@ Three, all amended in the spec in the same commit range as the code, per
    Row 1.5 requires exactly two specs, and the plan does not provide for
    evidence-only specs. What they proved is recorded above; what they were is
    not part of the phase.
+
+4. **No pull request was opened, though plan step 6.7 calls for one.** The
+   branch is pushed as `origin/phase-2-intake-form` and the diff against
+   `phase-1-slice` is the phase's work, but no GitHub client or credential is
+   available in the environment this phase was built in — `gh` is not
+   installed and no token is set. As in Phase 0's step 11.5, the step is
+   recorded rather than silently skipped: the pull request is opened by hand
+   against `main`, stating that it stacks on Phase 1's and that Phase 1 merges
+   first. The spec review the step exists for happened anyway, as step 6.1
+   to 6.6.
 
 Plan step 5.5 asked for a deliberate-failure check on a new assertion. Two were
 observed without being arranged: the round trip failed at
