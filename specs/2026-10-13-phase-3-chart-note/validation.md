@@ -372,7 +372,7 @@ deep: Phase 1, then Phase 2, then this.
 
 ### Recorded divergences from the spec as written
 
-Four, all amended in the spec in the same commit range as the code, per
+Five, all amended in the spec in the same commit range as the code, per
 `CLAUDE.md`:
 
 1. **Decision D1 was amended to give the header block a letterhead and a
@@ -398,6 +398,15 @@ Four, all amended in the spec in the same commit range as the code, per
    Phase 5 pins the worker count or scopes the assertion. Phase 3 did not fix it,
    because the committed two-spec suite runs in one worker and the fix belongs
    to the phase that breaks it.
+
+5. **No pull request was opened, though plan step 5.7 calls for one.** The
+   branch is pushed as `origin/phase-3-chart-note`, but no GitHub client or
+   credential exists in the environment this phase was built in — `gh` is not
+   installed and no token is set. As in Phase 0's step 11.5 and Phase 2's step
+   6.7, the step is recorded rather than silently skipped: the pull request is
+   opened by hand against `main`, stating the Phase 1 → Phase 2 → Phase 3 merge
+   order. The spec review the step exists for happened anyway, as steps 5.1
+   to 5.6.
 
 ## Explicitly not validated here
 
