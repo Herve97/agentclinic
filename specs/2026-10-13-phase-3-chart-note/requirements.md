@@ -109,6 +109,13 @@ things a clinical document never omits. This is the cheapest possible fix for
 the roadmap's condition, and it is header-block content rather than the clinic
 identity block on `/`, which stays Phase 9's.
 
+**Amended 2026-10-13 by Phase 4: the section list is now seven.** Phase 4 adds
+`Diagnosis` between `Assessment` and `Plan`, which is where a chart note puts
+it — the assessment reasons, the diagnosis names, the plan follows from the
+name. The six sections above are unchanged in content and order; the list is no
+longer exhaustive. Recorded here rather than only in Phase 4, because this is
+the table a reader consults for the shape of the page.
+
 **"What the human said" and "what the human meant" belong to History**, as a
 reported-speech pair. They are the two funniest fields on the form, and the
 temptation is to give them a section of their own with a heading that frames
@@ -289,11 +296,15 @@ schema, the migrations, and the absence of `src/content/`.
 | Forty-two authored lines become content sprawl that nobody reviews.                                      | D3 keys the plan on one axis rather than two, which is the difference between forty-two lines and ninety. Validation §5 requires every line to be read once.    |
 | "A stranger gets the premise" is unfalsifiable, so the phase passes itself.                              | Validation §5 turns it into a stated test with a named failure condition: the note is read with the rest of the site hidden, and anything explaining it is cut. |
 
-**Open question for Phase 4, not this one:** whether the coding scheme derives
-its code from these four values or from the raw answers. If it uses these,
-`case-note.ts` is where it reads them; if it uses the raw answers, these
-functions stay presentation-only. Phase 4 decides, and this phase does not
-guess.
+**Open question for Phase 4, not this one — answered 2026-10-13:** whether the
+coding scheme derives its code from these four values or from the raw answers.
+Phase 4 decided on the derived values, so `case-note.ts` is where the index
+reads them and these functions are no longer presentation-only. The reasoning
+is decision D1 of
+[2026-10-13-phase-4-diagnosis-coding/requirements.md](../2026-10-13-phase-4-diagnosis-coding/requirements.md):
+two ladders of thresholds could disagree, and a note that read "Requirement
+unchanged" beside a code for instability would be worse than a code with less
+flexibility.
 
 **Open question for Phase 8, not this one:** whether the follow-up interval
 becomes a stored date once a case can be discharged. Deriving it on read is

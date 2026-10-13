@@ -57,12 +57,13 @@ test("an intake submission comes back as a case number", async ({ page }) => {
   );
   await expect(note).toContainText("2 prior episodes recorded.");
 
-  // The six sections of decision D1, in order. The header block is headed by
-  // the <h1>; the other five are <h2>.
+  // The sections of Phase 3's decision D1 plus Phase 4's Diagnosis, in order.
+  // The header block is headed by the <h1>; the rest are <h2>.
   await expect(page.locator("main h2")).toHaveText([
     "Presenting complaint",
     "History",
     "Assessment",
+    "Diagnosis",
     "Plan",
     "Follow-up",
   ]);
@@ -82,6 +83,18 @@ test("an intake submission comes back as a case number", async ({ page }) => {
       .locator("dd"),
   ).toHaveText("Subacute");
   await expect(note).toContainText("Review in 14 days.");
+
+  // Phase 4: the assigned code, scoped to its own <dd> and exact for the same
+  // reason. Six revisions is a marked burden and "Several days" is subacute,
+  // which the index codes ACDI-12. The twenty-code table is unit tested in
+  // src/domain/diagnosis.test.ts; this proves the page is wired to it.
+  await expect(
+    page
+      .locator("dl > div", { has: page.locator('dt:text-is("Code")') })
+      .locator("dd"),
+  ).toHaveText("ACDI-12");
+  await expect(note).toContainText("Requirement instability, marked, subacute");
+  await expect(note).toContainText("maintained by this clinic");
 });
 
 // Decision D7: the failure path. Not provable by a unit test — it is about the

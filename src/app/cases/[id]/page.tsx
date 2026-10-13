@@ -17,6 +17,7 @@ import {
   revisionBurden,
   revisionSentence,
 } from "@/domain/case-note";
+import { assignDiagnosis, indexCitation } from "@/domain/diagnosis";
 
 // Decision D7: the stored value is UTC, "YYYY-MM-DD HH:MM:SS". The date part is
 // shown and the whole timestamp goes in the attribute. No locale formatting:
@@ -69,6 +70,7 @@ export default async function CasePage({ params }: PageProps<"/cases/[id]">) {
   const course = chronicity(record.duration);
   const episodes = episodeHistory(record.priorEpisodes);
   const burden = revisionBurden(record.requirementRevisions);
+  const diagnosis = assignDiagnosis(course, episodes, burden);
 
   return (
     <main className="mx-auto max-w-prose px-6 py-16">
@@ -122,6 +124,23 @@ export default async function CasePage({ params }: PageProps<"/cases/[id]">) {
 
       <h2 className="mt-8 text-xl font-semibold">Assessment</h2>
       <p className="mt-2">{assessmentLines[course][episodes]}</p>
+
+      {/* Decision D7: the assessment reasons, the diagnosis names, the plan
+          follows from the name. The code and its rubric come first because they
+          are the line a reader quotes. */}
+      <h2 className="mt-8 text-xl font-semibold">Diagnosis</h2>
+      <dl className="mt-2">
+        <div className="flex gap-4">
+          <dt className="w-40 shrink-0">Code</dt>
+          <dd>{diagnosis.code}</dd>
+        </div>
+        <div className="mt-2 flex gap-4">
+          <dt className="w-40 shrink-0">Rubric</dt>
+          <dd>{diagnosis.rubric}</dd>
+        </div>
+      </dl>
+      <p className="mt-2">{diagnosis.description}</p>
+      <p className="mt-2 text-sm">{indexCitation}</p>
 
       <h2 className="mt-8 text-xl font-semibold">Plan</h2>
       <p className="mt-2">{planLines[burden]}</p>
