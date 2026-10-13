@@ -5,9 +5,14 @@ const baseURL = `http://localhost:${port}`;
 
 export default defineConfig({
   testDir: "./e2e",
-  // One spec in this phase. No parallelism to configure, no retries to hide a
-  // flake behind.
+  // Two spec files from Phase 5 on. fullyParallel orders tests within a file,
+  // but Playwright still runs separate files in parallel workers — and every
+  // spec here shares one local.db and one dev server. Phase 3 watched that
+  // break the failure-path row count against a third spec, and Phase 5 asserts
+  // a case is at the top of a list, which any concurrent insert would break.
+  // One worker, no retries to hide a flake behind.
   fullyParallel: false,
+  workers: 1,
   retries: 0,
   reporter: "list",
   // Next compiles each route on demand in dev, and a cold compile of
