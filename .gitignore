@@ -26,6 +26,12 @@ local.db-*
 *.db-wal
 *.db-shm
 
+# The e2e probe chart (Phase 6, decision D10). e2e/patients.spec.ts writes one
+# of these into src/content/patients/ to prove that adding a file publishes a
+# patient, and deletes it in a finally. Ignored so a killed run leaves nothing
+# committable.
+src/content/patients/zz-probe-*.mdx
+
 # playwright
 /test-results
 /playwright-report

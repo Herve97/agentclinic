@@ -82,6 +82,31 @@ decision is worth revisiting.**
 - No secrets in the repo. `.env.local` for development; Vercel environment
   variables in production.
 
+### How the MDX line is implemented
+
+Added 2026-10-27 by Phase 6, which was the first phase to need it. The table
+above says "MDX files in-repo" without saying how one becomes a page, and the
+next person to add a content type should not have to re-derive this.
+
+Authored content lives in `src/content/<collection>/` as `.mdx` files and is
+read by one impure module per collection, which compiles each file with
+**`next-mdx-remote`** (its React Server Components entry point) and
+**`remark-gfm`**, and validates the frontmatter against a Zod schema in
+`src/domain/`. Compilation happens at build time from files in the repository,
+so nothing is fetched and the offline constraint in
+[mission.md](./mission.md) holds.
+
+**`@next/mdx` with `pageExtensions` was rejected.** It makes each `.mdx` file a
+route by putting it in `src/app/`, which contradicts the `src/content/`
+convention in the list above, leaves an index page with no list of files to enumerate, and
+makes frontmatter a module export rather than data — so a typo in it is a
+missing heading on a published page rather than a failed build. `@mdx-js/mdx`
+plus `gray-matter` directly was also rejected: that is what `next-mdx-remote`
+already is, with the RSC plumbing written.
+
+See decision D2 of
+[2026-10-27-phase-6-patient-profiles/requirements.md](./2026-10-27-phase-6-patient-profiles/requirements.md).
+
 ## Scaffold migration note
 
 The repo currently holds a bare `tsc` + `src/index.ts` hello-world. Phase 0
