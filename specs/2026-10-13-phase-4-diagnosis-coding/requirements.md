@@ -236,10 +236,12 @@ schema, the migrations, `src/domain/case.ts`, and the absence of
 | The table grows a twenty-first code for a case the author happened to think of, and the rules sprawl. | D3 and D4 fix the shape at four groups of five. A new code means a new group or a new axis, both of which are spec amendments rather than table edits. |
 | Deriving on read means a case's code changes when the table changes.                                  | D6 accepts this while every case is open and names Phase 5 and Phase 8 as the places to revisit it.                                                    |
 
-**Open question for Phase 5, not this one:** whether the waiting room shows the
-code, the rubric, or both. The roadmap's Phase 5 line says "code", and the
-rubric is the part that is funny without context, so Phase 5 should decide with
-the list in front of it.
+**Open question for Phase 5, not this one — answered 2026-10-13:** whether the
+waiting room shows the code, the rubric, or both. Phase 5 decided on both,
+sharing one cell so the roadmap's four columns stay four. A bare `ACDI-12` in a
+column is institutionally correct and completely opaque; the rubric is what
+reads without context. See decision D7 of
+[2026-10-13-phase-5-waiting-room/requirements.md](../2026-10-13-phase-5-waiting-room/requirements.md).
 
 **Open question for Phase 8, not this one:** whether a discharge summary freezes
 the code. See decision D6.

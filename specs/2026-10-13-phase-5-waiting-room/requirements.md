@@ -184,7 +184,34 @@ funny without context, which is exactly what a list skimmed by a stranger
 needs. Keeping both in one cell honours the roadmap's four columns rather than
 adding a fifth.
 
-### D8 — Versions are pinned exactly, resolved at install time
+### D8 — The pagination test seeds its own fixture
+
+Added 2026-10-13, during implementation. `e2e/waiting-room.spec.ts` inserts
+cases directly until the table holds more than one page, then asserts the
+pagination behaviour.
+
+**Why:** the first version of the test followed the `Next page` link. That
+passed against the development database, which had accumulated twenty-three
+cases over five phases, and failed on a cold clone, which had two — no second
+page, no link, no test. The cold-clone row in validation §7 is what caught it,
+which is the row's whole purpose.
+
+**Why a direct insert rather than twenty-one form submissions:** filling the
+intake form twenty-one times would take about two minutes and would be
+exercising intake, which `e2e/intake.spec.ts` already covers, in order to
+prove something about pagination. The seeded rows are complete and valid — the
+same shape the form produces.
+
+**Why this is not a schema dependency to worry about:** the spec already reads
+`cases` directly for the failure-path row count (Phase 2's decision D7), so the
+e2e suite is already coupled to the table. Writing to it is the same coupling
+in the same file.
+
+**The general lesson, recorded for later phases:** a spec that depends on data
+accumulated by earlier runs is not a spec. Phase 8's discharge summary and
+Phase 11's abuse paths will both want fixtures, and this is the pattern.
+
+### D9 — Versions are pinned exactly, resolved at install time
 
 As every phase since Phase 0. This phase expects to add no dependencies.
 

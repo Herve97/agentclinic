@@ -134,6 +134,20 @@ exists — Phase 3 observed it fail that way against a temporary third spec. Pha
 5 either pins `workers: 1` or scopes that assertion to a marker value rather
 than to a whole-table count.
 
+Resolved 2026-10-14: `playwright.config.ts` pins `workers: 1`, with a comment
+naming what it protects — one database, one dev server, and a spec that asserts
+a row is at the top of a list. `npm run test:e2e` reports `Running 4 tests using
+1 worker`. See decision D6 of
+[2026-10-13-phase-5-waiting-room/requirements.md](./2026-10-13-phase-5-waiting-room/requirements.md)
+and validation row 1.5.
+
+Amended 2026-10-14: a sixth bullet belongs on this phase's list — **a spec may
+not depend on data earlier runs happened to leave behind.** The pagination test
+seeds its own fixture because the first version only passed against a
+development database carrying twenty-three cases, and failed on a cold clone
+holding two. Decision D8 of the phase requirements records it; Phases 8 and 11
+will both want fixtures of their own.
+
 ---
 
 ## Phase 6 — Patient profiles
