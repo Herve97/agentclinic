@@ -108,3 +108,28 @@ describe("readPatient", () => {
     expect(await readPatient("not-a-patient", directory)).toBeUndefined();
   });
 });
+
+// Validation §3 row 3.20, and the one suite in this repository that asserts
+// against authored content rather than a fixture. Decision D9: the content
+// directory is this phase's public interface, and a suite that validated a
+// hand-written fixture and never the clinic's own charts would pass while the
+// site was broken.
+describe("the clinic's own charts", () => {
+  it("3.20 all parse, hold unique clinic numbers, and cite indexed codes", async () => {
+    const register = await listPatients();
+
+    expect(register).toHaveLength(5);
+
+    // listPatients validates every chart against the schema and throws on the
+    // first failure, so arriving here is the parse assertion. These are the
+    // facts the register itself depends on.
+    const numbers = register.map((patient) => patient.frontmatter.number);
+    expect(new Set(numbers).size).toBe(numbers.length);
+    expect(numbers).toEqual([...numbers].sort());
+
+    for (const patient of register) {
+      expect(patient.frontmatter.history.length).toBeGreaterThan(0);
+      expect(patient.slug).toMatch(/^[a-z0-9]+(?:-[a-z0-9]+)*$/);
+    }
+  });
+});
