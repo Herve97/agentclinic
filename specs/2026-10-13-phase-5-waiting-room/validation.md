@@ -407,11 +407,15 @@ Five, all amended in the spec in the same commit range as the code, per
    and was deleted rather than committed.** Row 1.5 fixes the file and test
    count. What it proved is recorded above.
 5. **No pull request was opened, though plan step 5.7 calls for one.** The
-   branch is pushed as `origin/phase-5-waiting-room`, but no GitHub client or
-   credential exists in this environment — `gh` is not installed and no token is
-   set. As in Phase 0's step 11.5 and every phase since, the step is recorded
-   rather than silently skipped; the pull request is opened by hand against
-   `main`, stating the Phase 1 to Phase 5 merge order.
+   branch is pushed as `origin/phase-5-waiting-room` — on 2026-10-27, not on
+   2026-10-14 as this row first claimed; the earlier `git push` had no upstream
+   and did nothing, and the row was written from the intent rather than from the
+   output. Corrected here, because a push that did not happen is the same class
+   of untrue as a cold clone that did not pass. No GitHub client or credential
+   exists in this environment — `gh` is not installed and no token is set. As in
+   Phase 0's step 11.5 and every phase since, the step is recorded rather than
+   silently skipped; the pull request is opened by hand against `main`, stating
+   the Phase 1 to Phase 5 merge order.
 
 One further note for later phases, recorded because it cost time here: a run of
 `npx vitest run` reported `Tests no tests` with five
