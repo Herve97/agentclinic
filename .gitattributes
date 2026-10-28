@@ -1,0 +1,10 @@
+# Line endings are normalised to LF in the working tree on every platform.
+#
+# Git already stores LF. Without this file, core.autocrlf=true converts to
+# CRLF on checkout on Windows, and Prettier — whose endOfLine default is "lf"
+# — then reports every file in the repository as misformatted. Validation row
+# 1.7 of every phase asserts `npx prettier --check .` exits 0, and on a cold
+# clone it did not: 69 files, none of them edited by anybody.
+#
+# text=auto still lets Git detect and leave binary files alone.
+* text=auto eol=lf
