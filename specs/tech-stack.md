@@ -111,6 +111,40 @@ advisories it closes are three: unauthenticated remote code execution in the
 image optimization API, denial of service in the App Router's Server Actions,
 and unauthenticated remote code execution in `use cache`.
 
+### An advisory that is not acted on is recorded too
+
+Added 2026-10-28. `npm audit` reports four moderate advisories that this
+repository is not going to fix, and the reason has to be written down or the
+next person re-derives it every time they run the command.
+
+The chain is `drizzle-kit` -> `@esbuild-kit/esm-loader` ->
+`@esbuild-kit/core-utils` -> `esbuild@0.18.20`, and the advisory is
+GHSA-67mh-4wv8-2f99: esbuild's development server answers requests from any
+origin, so any website can read its responses. Four entries, one cause.
+
+It is not fixed, for three reasons that each stand alone:
+
+- **The suggested fix is a downgrade.** `npm audit` offers `drizzle-kit`
+  0.18.1, flagged `isSemVerMajor`. The installed version, 0.31.11, is the
+  current release. Taking the advice would move the migration tool back
+  thirteen minor versions to silence a warning.
+- **The vulnerable package is deprecated and vestigial.** Both
+  `@esbuild-kit` packages say `Merged into tsx`, so they will not be patched.
+  `drizzle-kit` 0.31.11 already depends on `tsx` directly, which carries
+  `esbuild@0.28.2`; the old loader is a dependency it has outgrown and not yet
+  dropped. There is no forward version to move to, and an `overrides` entry
+  would contradict `core-utils`' own `~0.18` pin — a claim of compatibility
+  nobody has tested.
+- **The exposure is not reachable.** The advisory is about `esbuild serve`.
+  `drizzle-kit` uses esbuild to transpile `drizzle.config.ts` and never starts
+  a server. It is a development-time CLI, it is not in the deployed bundle,
+  and `npm run db:migrate` opens no port.
+
+Revisit when `drizzle-kit` drops `@esbuild-kit/esm-loader`, which its own
+dependency on `tsx` suggests is coming. Until then `npm audit` reporting four
+moderate advisories and zero high or critical is the expected state of this
+repository, not a regression.
+
 ### How the MDX line is implemented
 
 Added 2026-10-27 by Phase 6, which was the first phase to need it. The table
