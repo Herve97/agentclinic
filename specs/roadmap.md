@@ -160,6 +160,14 @@ will both want fixtures of their own.
 **Done when:** adding an MDX file publishes a patient with no code change.
 **Out:** linking patients to submitted cases.
 
+Resolved 2026-10-28: built as written. Five charts in `src/content/patients/`,
+frontmatter typed in `src/domain/patient.ts` and refined against Phase 4's code
+index, `/patients` and `/patients/[slug]` both prerendered. The done-when
+condition is proved from the outside: `e2e/patients.spec.ts` writes a sixth
+chart into the content directory, finds the patient on the register and at its
+own slug, and deletes it in a `finally`. Nothing links patients to cases. See
+[2026-10-27-phase-6-patient-profiles/validation.md](./2026-10-27-phase-6-patient-profiles/validation.md).
+
 ---
 
 ## Phase 7 — Group session transcripts
@@ -173,6 +181,23 @@ will both want fixtures of their own.
 **Done when:** transcripts render in the house layout and cross-link to the
 patient profiles of everyone present.
 **Out:** audio, any interactivity.
+
+Added 2026-10-28, from Phase 6: **the cast is not declared anywhere yet, and
+this phase decides where.** Phase 6 left the patient schema without a
+`transcripts` field on purpose — a field with no reader is a guess — so the
+five charts mention group attendance in prose only. Phase 7 chooses between a
+cast list in the transcript's own frontmatter, a back-reference on the patient,
+or both, with five charts in front of it rather than none. Whichever it picks,
+the slugs it names are validated at build time the way Phase 6 refines a
+history entry's code against the diagnosis index: a cross-link to a patient who
+does not exist is a build failure, not a 404.
+
+Also from Phase 6, and already paid for: the MDX toolchain is installed and
+pinned (`next-mdx-remote`, `remark-gfm`, `@types/mdx`), `src/content/` holds
+the one module allowed to touch the disk, the filename is the slug, and the
+component map lives in `src/content/mdx-components.tsx`. Phase 7 extends that
+map for speaker labels rather than starting one. The register reads every chart
+to render one page, which is correct at five and is not measured until Phase 12.
 
 ---
 

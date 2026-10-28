@@ -82,6 +82,26 @@ decision is worth revisiting.**
 - No secrets in the repo. `.env.local` for development; Vercel environment
   variables in production.
 
+### Security advisories are taken on their own branch
+
+Added 2026-10-28 by Phase 6, which lost time to one. A published advisory
+against a pinned dependency is a version bump, not phase work, and a phase that
+absorbs one stops being reviewable as the thing it set out to be: its diff
+carries a lockfile churn nobody asked it to review, and the bump cannot be
+merged ahead of the phase that happens to contain it.
+
+So the bump is taken on a branch of its own, named for the advisory rather than
+for a phase, holding the version change and nothing else, and it merges on its
+own schedule. The phase in progress records the advisory in its validation
+section — what it cost, which commands it aborted — and keeps the old pin.
+
+`next-security-upgrade` is the first of these: Next 16.4.0 to 16.4.3, one
+commit, branched from `phase-5-waiting-room`. Next 16.4.0's advisory aborts
+both `next build` and Playwright's `webServer` non-zero, periodically rather
+than once, after the work they were asked to do has already succeeded. A
+`verify:all` run on the old pin therefore needs retrying, and its exit code has
+to be read unpiped — a pipeline reports the last command's status, not npm's.
+
 ### How the MDX line is implemented
 
 Added 2026-10-27 by Phase 6, which was the first phase to need it. The table
