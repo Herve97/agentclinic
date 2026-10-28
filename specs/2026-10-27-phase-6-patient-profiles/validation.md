@@ -496,12 +496,21 @@ Six, all amended in the spec in the same commit range as the code, per
    `next-security-upgrade` as the first of them and recording both lessons —
    the retry and the unpiped exit code — where the next phase to meet an
    advisory will find them.
-6. **No pull request was opened, though plan step 7.6 calls for one.** No
-   GitHub client or credential exists in this environment — `gh` is not
-   installed and no token is set. As in Phase 0's step 11.5 and every phase
-   since, the step is recorded rather than silently skipped; the pull request
-   is opened by hand against `main`, stating the Phase 1 to Phase 6 merge
-   order.
+6. **The branch is pushed; the pull request is not opened.** Plan step 7.6
+   calls for both. `git push -u origin phase-6-patient-profiles` created the
+   branch on the remote at `a2689ec`, and the push was verified rather than
+   assumed — `git rev-parse` on the local branch and on
+   `origin/phase-6-patient-profiles` return the same commit, which is the
+   check Phase 5 added after recording a push that had not happened. The
+   remote reports 27 commits ahead of `origin/main`, which is Phases 1 to 6
+   stacked.
+
+   No pull request: no GitHub client or credential exists in this environment
+   — `gh` is not installed and no token is set. As in Phase 0's step 11.5 and
+   every phase since, the step is recorded rather than silently skipped. The
+   pull request is opened by hand at
+   `https://github.com/Herve97/agentclinic/pull/new/phase-6-patient-profiles`,
+   against `main`, stating the Phase 1 to Phase 6 merge order.
 
 One note for Phase 7, recorded because this phase deliberately left it open:
 the patient schema has no `transcripts` field, and the charts mention group
