@@ -96,11 +96,20 @@ own schedule. The phase in progress records the advisory in its validation
 section — what it cost, which commands it aborted — and keeps the old pin.
 
 `next-security-upgrade` is the first of these: Next 16.4.0 to 16.4.3, one
-commit, branched from `phase-5-waiting-room`. Next 16.4.0's advisory aborts
-both `next build` and Playwright's `webServer` non-zero, periodically rather
-than once, after the work they were asked to do has already succeeded. A
-`verify:all` run on the old pin therefore needs retrying, and its exit code has
-to be read unpiped — a pipeline reports the last command's status, not npm's.
+commit, branched from `main` once Phase 6 had merged. It was first cut from
+`phase-5-waiting-room` and re-cut from `main` rather than merged into a phase
+in progress, which is the convention above working as intended.
+
+Next 16.4.0's advisory aborts both `next build` and Playwright's `webServer`
+non-zero, periodically rather than once, after the work they were asked to do
+has already succeeded. A `verify:all` run on the old pin therefore needs
+retrying — Phase 6's review took seven attempts — and its exit code has to be
+read unpiped, because a pipeline reports the last command's status and not
+npm's. On 16.4.3, `npm run verify:all` exits 0 on the first attempt with no
+`SecurityFatalError` in the output, which is what this branch is for. The
+advisories it closes are three: unauthenticated remote code execution in the
+image optimization API, denial of service in the App Router's Server Actions,
+and unauthenticated remote code execution in `use cache`.
 
 ### How the MDX line is implemented
 
