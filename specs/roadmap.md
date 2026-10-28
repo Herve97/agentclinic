@@ -199,6 +199,17 @@ component map lives in `src/content/mdx-components.tsx`. Phase 7 extends that
 map for speaker labels rather than starting one. The register reads every chart
 to render one page, which is correct at five and is not measured until Phase 12.
 
+Resolved 2026-10-28: built as written. Three transcripts in
+`src/content/transcripts/`, frontmatter typed in `src/domain/transcript.ts`,
+`/transcripts` and `/transcripts/[slug]` both prerendered. The cast question
+the note above left open is closed by decision D2: a transcript declares who
+was present and a chart says nothing about transcripts, so the five charts are
+byte-identical to what Phase 6 left. The cross-link is checked at build time
+rather than hoped for — a cast naming a patient who does not exist stops
+`next build` with the file, the field path and the slug, which validation row
+4.4 proves by breaking one. No audio, no interactivity, no new dependency. See
+[2026-10-28-phase-7-transcripts/validation.md](./2026-10-28-phase-7-transcripts/validation.md).
+
 Added 2026-10-28, after Phase 6 merged, and carried by every phase from here:
 **a validation row that was only ever run in the author's working tree is not
 evidence.** Row 1.7 — `npx prettier --check .` exits 0 — had been ticked since
@@ -224,6 +235,27 @@ checks, not a chosen subset of them.
 **Done when:** a discharge summary prints to one clean page with no browser
 chrome.
 **Out:** email, PDF generation, sharing.
+
+Added 2026-10-28, from Phase 7: **this phase introduces the first status
+change that existing content can contradict.** A patient moves to discharged,
+and three transcripts already name patients by slug and render their current
+designation and status from the chart. Nothing breaks — a transcript is dated
+and a discharge is later — but Phase 8 should decide deliberately whether a
+discharged patient's name still links from a session they attended, and say so
+rather than discovering the answer from how the page happens to render.
+
+Also from Phase 7, and the reason the above is worth a line: validation row
+5.7 caught four contradictions between the transcripts and the charts, all of
+them from writing content against memory instead of against the record. Phase
+8's discharge summary is assembled from a chart and will be a fifth
+opportunity to do the same. The rule earned in Phase 7 is that cross-content
+claims are checked against the content they refer to, as a row, before the
+phase closes.
+
+And one thing Phase 8 does not have to build: `src/domain/slug.ts` and
+`src/domain/frontmatter.ts` now hold the filename rule and the shared
+frontmatter field builders, so a third collection — if Phase 8 needs one —
+starts from a schema and a reader rather than from a copy of either.
 
 ---
 
