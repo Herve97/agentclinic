@@ -83,7 +83,11 @@ export function transcriptComponents({
           )}
           <span className="ml-2">{at}</span>
         </p>
-        <p className="mt-1">{children}</p>
+        {/* Not a <p>: MDX has already wrapped the turn's text in one, and a
+            paragraph inside a paragraph is invalid HTML that the browser
+            silently repositions. Caught by validation row 2.11 rather than by
+            reading the markup. */}
+        <div className="mt-1">{children}</div>
       </div>
     );
   }
@@ -94,10 +98,8 @@ export function transcriptComponents({
     // identically is a record that has lost the distinction.
     return (
       <aside className="mt-4 border-l pl-4 text-sm">
-        <p>
-          <span className="font-semibold">{"Clinician's note. "}</span>
-          {children}
-        </p>
+        <p className="font-semibold">{"Clinician's note"}</p>
+        {children}
       </aside>
     );
   }

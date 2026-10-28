@@ -32,6 +32,11 @@ local.db-*
 # committable.
 src/content/patients/zz-probe-*.mdx
 
+# The e2e probe transcript (Phase 7, decision D11). Same arrangement as the
+# chart probe above: e2e/transcripts.spec.ts writes one to prove that adding a
+# file publishes a session, and deletes it in a finally.
+src/content/transcripts/zz-probe-*.mdx
+
 # playwright
 /test-results
 /playwright-report
