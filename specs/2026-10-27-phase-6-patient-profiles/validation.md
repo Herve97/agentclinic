@@ -53,7 +53,9 @@ land differently, as Phase 5 amended its own.
   `8 passed (1.6m)`. Three files. The row is amended from seven tests to eight;
   see the divergences under the merge gate.
 - 1.7 `npx prettier --check .` -> `All matched files use Prettier code style!`,
-  the five `.mdx` charts included.
+  the five `.mdx` charts included. **Corrected 2026-10-28: this row was true
+  where it was run and false for anybody who cloned.** See the correction
+  below.
 - 1.8 `npm run db:migrate` -> `migrations applied successfully`, and no
   migration generated. `drizzle/meta/_journal.json` still lists exactly two
   entries, and `git diff phase-5-waiting-room -- drizzle/ src/db/` is empty.
@@ -102,6 +104,27 @@ above still holds, and the advisory was worse rather than better:
 - `git status --porcelain` after all of it lists the three spec files this
   group edits and the pre-existing untracked `.cursor/`. No probe chart, no
   stray artefact.
+
+**Row 1.7 was wrong, and the correction is kept rather than the row rewritten.**
+Found on 2026-10-28, after this phase had merged. `npx prettier --check .`
+exits 0 in a working tree whose files the tooling wrote, and exits 1 on a cold
+clone on Windows, reporting **69 files** — every source file in the
+repository, none of them edited by anybody. Git stores LF; with
+`core.autocrlf=true` and no `.gitattributes`, checkout converts the working
+tree to CRLF, and Prettier's `endOfLine` default is `lf`.
+
+This is Phase 5's lesson in a different costume: a check may not depend on the
+state an earlier run happened to leave behind. Row 7.8's cold clone missed it
+because it ran `npm ci` and the e2e suite, which is what Phase 5's defect had
+taught it to run, and not `prettier --check`. A row that passes only on the
+machine that authored it is the failure mode this document exists to catch,
+and it took a clone to catch it here too.
+
+Fixed by `.gitattributes` with `* text=auto eol=lf`, which changes the
+checkout and not the content — `git add --renormalize .` staged nothing,
+because the stored bytes were already LF. Verified the way the row should have
+been in the first place: a fresh `git clone` on Windows now checks out LF, and
+`prettier --check .` in that clone exits 0.
 
 ---
 

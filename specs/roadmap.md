@@ -199,6 +199,18 @@ component map lives in `src/content/mdx-components.tsx`. Phase 7 extends that
 map for speaker labels rather than starting one. The register reads every chart
 to render one page, which is correct at five and is not measured until Phase 12.
 
+Added 2026-10-28, after Phase 6 merged, and carried by every phase from here:
+**a validation row that was only ever run in the author's working tree is not
+evidence.** Row 1.7 — `npx prettier --check .` exits 0 — had been ticked since
+Phase 0 and was false on a cold clone on Windows for all of them: Git stores
+LF, `core.autocrlf=true` checks out CRLF, and Prettier's `endOfLine` default
+is `lf`, so a fresh clone reported 69 misformatted files that nobody had
+touched. Fixed by `.gitattributes`. The lesson is not about line endings. It
+is that Phase 5 already wrote down "a spec may not depend on data earlier runs
+happened to leave behind" and this is the same rule applied to the working
+tree rather than to the database — so the cold-clone row should run the
+checks, not a chosen subset of them.
+
 ---
 
 ## Phase 8 — Discharge summaries
