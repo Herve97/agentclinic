@@ -23,9 +23,12 @@ explains the rule.
 rather than a filename, which is what a cast entry is. One regular expression,
 two callers, no second definition.
 
-1.3 `src/domain/patient.ts` imports `slugFromFilename` instead of defining it.
-Nothing else in that file changes, and nothing that imports it changes either —
-if a caller has to be edited, the move was not a move.
+1.3 `src/domain/patient.ts` imports the moved helpers instead of defining them
+and re-exports the two it used to own, so nothing that imports it changes —
+if a caller has to be edited, the move was not a move. Create
+`src/domain/frontmatter.ts` in the same step for `clinicalDate`,
+`requiredText` and `frontmatterError`, which step 2.4 would otherwise force a
+second copy of.
 
 1.4 Move the `slugFromFilename` rows of `src/domain/patient.test.ts` into
 `src/domain/slug.test.ts`, keeping their names, and add rows for `slugShape`.

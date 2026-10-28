@@ -6,7 +6,6 @@ import {
   patientFrontmatterSchema,
   patientStatuses,
   registerOrder,
-  slugFromFilename,
   type PatientRecord,
 } from "./patient";
 
@@ -140,23 +139,8 @@ describe("the frontmatter schema", () => {
   });
 });
 
-describe("slugFromFilename", () => {
-  it("3.13 takes the slug from the filename", () => {
-    expect(slugFromFilename("arbour-7.mdx")).toBe("arbour-7");
-  });
-
-  it("3.14 rejects a filename that cannot be a slug and names it", () => {
-    for (const filename of [
-      "Arbour 7.mdx",
-      "arbour_7.mdx",
-      "arbour-7.md",
-      "-arbour.mdx",
-      "arbour--7.mdx",
-    ]) {
-      expect(() => slugFromFilename(filename)).toThrow(filename);
-    }
-  });
-});
+// Rows 3.13 and 3.14 moved to ./slug.test.ts with the function, under their
+// original names — Phase 7, decision D3.
 
 describe("registerOrder", () => {
   it("3.15 orders the register by clinic number whatever order the charts arrive in", () => {

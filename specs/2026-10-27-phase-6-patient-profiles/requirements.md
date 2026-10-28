@@ -154,6 +154,22 @@ to look up.
 `.mdx`. A file called `Arbour 7.mdx` is rejected with its name in the message
 rather than published at a URL that needs escaping.
 
+> **Amended 2026-10-28 by Phase 7.** The decision stands; only its address
+> changed. `slugFromFilename` and its regular expression lived in
+> `src/domain/patient.ts`, which was right while there was one content
+> collection. Phase 7 adds a second, and a transcript module importing a
+> patient module to learn what a filename may look like is the wrong shape, so
+> the rule moved to `src/domain/slug.ts` unchanged and `patient.ts` re-exports
+> it. The rule itself — lowercase letters, digits, single internal hyphens,
+> ending `.mdx` — is untouched, and rows 3.13 and 3.14 of
+> [validation.md](./validation.md) still have passing tests under their
+> original names, now in `src/domain/slug.test.ts`.
+>
+> The same move took `clinicalDate`, `requiredText` and `frontmatterError` to
+> `src/domain/frontmatter.ts`, for the same reason and in the same commit. See
+> decision D3 of
+> [../2026-10-28-phase-7-transcripts/requirements.md](../2026-10-28-phase-7-transcripts/requirements.md).
+
 ### D4 — Frontmatter is a Zod schema, and a bad file fails the build
 
 One schema in `src/domain/patient.ts`, per the repository's convention that

@@ -130,6 +130,19 @@ range rather than silently superseded.
 The rule itself does not change: lowercase letters, digits, single internal
 hyphens, ending `.mdx`.
 
+**Extended while being built, 2026-10-28.** As first written this decision
+moved the slug rule alone. Plan step 2.4 then left a choice about the date
+validator, and the choice resolved the same way: `clinicalDate`,
+`requiredText` and `frontmatterError` moved to `src/domain/frontmatter.ts` in
+the same commit. The alternative was a second copy of a twenty-line
+shaped-and-real date check, which is precisely the second source of truth this
+decision exists to remove — a transcript dated `2026-13-45` has to be refused
+by the same code that refuses it on a chart, not by a sibling of it.
+
+So `patient.ts` loses four things rather than one, and validation row 7.3 is
+amended to expect that diff. It still loses only moves: no behaviour changed,
+and all 134 of Phase 6's tests passed unaltered immediately after.
+
 ### D4 — The cast is resolved in the reader, not in the schema
 
 Phase 6 refined a history entry's `code` inside the Zod schema, against
